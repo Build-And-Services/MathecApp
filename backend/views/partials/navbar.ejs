@@ -144,7 +144,7 @@
                 <img alt="Image placeholder" src="/public/assets/img/theme/team-4.jpg">
               </span>
               <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm  font-weight-bold">John Snow</span>
+                <span class="mb-0 text-sm  font-weight-bold"><%= admin.email  %></span>
               </div>
             </div>
           </a>
@@ -154,8 +154,9 @@
             </div>
             <div class="dropdown-divider"></div>
             <a href="#!" class="dropdown-item">
-              <i class="ni ni-user-run"></i>
-              <span>Logout</span>
+              <form action="/auth/Logout" method="post">
+                <span><button type="submit" class="btn bg-gradient-danger text-light">Logout</button></span>
+              </form>
             </a>
           </div>
         </li>

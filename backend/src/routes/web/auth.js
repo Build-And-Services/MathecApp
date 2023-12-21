@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const adminController = require('./../../controllers/AdminController');
 
-router.get('/login', (req, res) => {
-  const nama = 'Pengguna';
-  res.render('auth/login', { nama, title: 'Mathec | Login', page_name: 'login' }); // Render file index.ejs dengan variabel 'nama'
-});
+router.get('/login', adminController.loginView);
+router.post('/login', adminController.login);
+router.post('/logout', adminController.logout);
 
 module.exports = router;

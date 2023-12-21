@@ -13,6 +13,9 @@ const questioner = require('./questioner');
 const GlobalMiddleware = require('../../middleware/GlobalMiddleware');
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
 // Auth route
 app.use('/api/auth', auth);

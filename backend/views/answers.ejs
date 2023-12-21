@@ -8,99 +8,152 @@
      <!-- Header -->
      <!-- Header -->
      <div class="header bg-primary pb-6">
-       <div class="container-fluid">
-         <div class="header-body">
-           <div class="row align-items-center py-4">
-             <div class="col-lg-6 col-7">
-               <h6 class="h2 text-white d-inline-block mb-0">Default</h6>
-               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                   <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                   <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
-                 </ol>
-               </nav>
-             </div>
-           </div>
-           <!-- Card stats -->
-           <div class="row">
-             <div class="col-xl-3 col-md-6">
-               <div class="card card-stats">
-                 <!-- Card body -->
-                 <div class="card-body">
-                   <div class="row">
-                     <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0">Total Pertanyaan</h5>
-                       <span class="h2 font-weight-bold mb-0">350,897</span>
-                     </div>
-                     <div class="col-auto">
-                       <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                         <i class="ni ni-active-40"></i>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-             <div class="col-xl-3 col-md-6">
-               <div class="card card-stats">
-                 <!-- Card body -->
-                 <div class="card-body">
-                   <div class="row">
-                     <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                       <span class="h2 font-weight-bold mb-0">2,356</span>
-                     </div>
-                     <div class="col-auto">
-                       <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                         <i class="ni ni-chart-pie-35"></i>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-             <div class="col-xl-3 col-md-6">
-               <div class="card card-stats">
-                 <!-- Card body -->
-                 <div class="card-body">
-                   <div class="row">
-                     <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0">Total Jawaban</h5>
-                       <span class="h2 font-weight-bold mb-0">924</span>
-                     </div>
-                     <div class="col-auto">
-                       <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                         <i class="ni ni-money-coins"></i>
-                       </div>
-                     </div>
-                   </div>
-
-                 </div>
-               </div>
-             </div>
-             <div class="col-xl-3 col-md-6">
-               <div class="card card-stats">
-                 <!-- Card body -->
-                 <div class="card-body">
-                   <div class="row">
-                     <div class="col">
-                       <h5 class="card-title text-uppercase text-muted mb-0">Kuisioner</h5>
-                       <span class="h2 font-weight-bold mb-0">49,65%</span>
-                     </div>
-                     <div class="col-auto">
-                       <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
-                         <i class="ni ni-chart-bar-32"></i>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+              <h6 class="h2 text-white d-inline-block mb-0">MaThec</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="/answers">Jawaban</a></li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Header-->
      <!-- Page content -->
+     <div class="container-fluid mt--6">
+       <div class="row">
+        <div class="col">
+          <div class="card">
+            <!-- Card header -->
+            <div class="card-header">
+              <h3 class="mb-0">Data Pelaporan Jawaban</h3>
+              <p class="text-sm mb-0">
+                Table untuk melihat data jawaban yang dilaporkan oleh user pada website MaThecApp
+              </p>
+            </div>
+            <div class="table-responsive py-4">
+              <table class="table table-flush" id="datatable-basic">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Jawaban</th>
+                    <th>Jenis Laporan</th>
+                    <th>Deskripsi</th>
+                    <th>Pelapor</th>
+                    <th>Bukti</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Heri</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                  <tr>
+                    <td>Kalo pengen tau jawabannya ya belajar ngentot</td>
+                    <td>Bersifat Sara</td>
+                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
+                    <td>Perdana</td>
+                    <td>Bukti.jpg</td>
+                    <td>
+                     <button class="btn btn-icon btn-danger btn-sm" type="button">
+                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                     </button>
+                   </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
+     <!-- End Page content -->
  
    </div>
 <%-include('./partials/footer.ejs')  %>

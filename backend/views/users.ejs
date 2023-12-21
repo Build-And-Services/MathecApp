@@ -1,158 +1,137 @@
-<%-include('./partials/header.ejs') %>
-   <!-- Sidenav -->
-   <%-include('./partials/sidenav.ejs')  %>
-   <!-- Main content -->
-   <div class="main-content" id="panel">
-     <!-- Topnav -->
-     <%-include('./partials/navbar.ejs')  %>
-     <!-- Header -->
-     <div class="header bg-primary pb-6">
-      <div class="container-fluid">
-        <div class="header-body">
-          <div class="row align-items-center py-4">
-            <div class="col-lg-6 col-7">
-              <h6 class="h2 text-white d-inline-block mb-0">MaThec</h6>
-              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                  <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-                  <li class="breadcrumb-item"><a href="/users">Users</a></li>
-                </ol>
-              </nav>
-            </div>
-          </div>
-         </div>
-       </div>
-     </div>
-     <!-- End Header -->
-     <!-- Page content -->
-     <div class="container-fluid mt--6">
-       <div class="row">
-        <div class="col">
-          <div class="card">
-            <!-- Card header -->
-            <div class="card-header">
-              <h3 class="mb-0">Data Pelaporan Pengguna</h3>
-              <p class="text-sm mb-0">
-                Table untuk melihat data pengguna yang dilaporkan oleh pengguna lain pada website MaThecApp
-              </p>
-            </div>
-            <div class="table-responsive py-4">
-              <table class="table table-flush" id="datatable-basic">
-                <thead class="thead-light">
-                  <tr>
-                    <th>User Dilaporkan</th>
-                    <th>Jenis Laporan</th>
-                    <th>Deskripsi</th>
-                    <th>Pelapor</th>
-                    <th>Bukti</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Heri</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                  <tr>
-                    <td>john Doe</td>
-                    <td>Bersifat Sara</td>
-                    <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                    <td>Perdana</td>
-                    <td>Bukti.jpg</td>
-                    <td>
-                     <button class="btn btn-icon btn-danger btn-sm" type="button">
-                     <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                     </button>
-                   </td>
-                  </tr>
-                </tbody>
-              </table>
+<%- include('./partials/header.ejs') %>
+  <!-- Sidenav -->
+  <%- include('./partials/sidenav.ejs') %>
+    <!-- Main content -->
+    <div class="main-content" id="panel">
+      <!-- Topnav -->
+      <%- include('./partials/navbar.ejs') %>
+        <!-- Header -->
+        <div class="header bg-primary pb-6">
+          <div class="container-fluid">
+            <div class="header-body">
+              <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                  <h6 class="h2 text-white d-inline-block mb-0">MaThec</h6>
+                  <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                      <li class="breadcrumb-item">
+                        <a href="/"><i class="fas fa-home"></i></a>
+                      </li>
+                      <li class="breadcrumb-item"><a href="/users">Users</a></li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-     </div>
-     <!-- End Page content -->
- 
-   </div>
-<%-include('./partials/footer.ejs')  %>
+        <!-- End Header -->
+        <!-- Page content -->
+        <div class="container-fluid mt--6">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <!-- Card header -->
+                <div class="card-header">
+                  <h3 class="mb-0">Data Pelaporan Pengguna</h3>
+                  <p class="text-sm mb-0">
+                    Table untuk melihat data pengguna yang dilaporkan oleh pengguna
+                    lain pada website MaThecApp
+                  </p>
+                </div>
+                <div class="table-responsive py-4">
+                  <table class="table table-flush" id="datatable-basic">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>User Dilaporkan</th>
+                        <th>Jenis Laporan</th>
+                        <th>Deskripsi</th>
+                        <th>Pelapor</th>
+                        <th>Bukti</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (reports.length> 0) { %> <% reports.forEach(function(report) { %>
+                          <tr>
+                            <td>
+                              <%= report.terlapor.name %>
+                            </td>
+                            <td>
+                              <%= report.jenis_laporan %>
+                            </td>
+                            <td>
+
+                              <%= report.deskripsi.substring(0, 20) + '...' %>
+
+                            </td>
+                            <td>
+                              <%= report.pelapor.name %>
+                            </td>
+                            <td>
+                              <%= report.bukti_laporan %>
+                            </td>
+                            <td>
+                              <button class="btn btn-icon btn-primary btn-sm" type="button" data-toggle="modal"
+                                data-target="#user-report-<%= report.id %>">
+                                <span class="btn-inner--text"><i class="fa fa-eye fa-1x m-0"></i> Lihat</span>
+                              </button>
+                              <a href="/users/delete/<%= report.terlapor.id %>/<%= report.id %>"
+                                class="btn btn-icon btn-danger btn-sm" type="button">
+                                <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                              </a>
+                            </td>
+                            <div class="modal fade" id="user-report-<%= report.id %>" tabindex="-1"
+                              aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Detail User</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <h4>Pelapor:</h4>
+                                    <p>
+                                      <%= report.pelapor.name %>
+                                    </p>
+                                    <h4>Terlapor:</h4>
+                                    <p class="text-red">
+                                      <%= report.terlapor.name %>
+                                    </p>
+                                    <h4>Jenis Laporan:</h4>
+                                    <p>
+                                      <%= report.jenis_laporan %>
+                                    </p>
+                                    <h4>Deskripsi:</h4>
+                                    <p>
+                                      <%= report.deskripsi %>
+                                    </p>
+                                    ....bukti....
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </tr>
+                          <% }); %>
+                            <% } else { %>
+                              <tr>
+                                <td colspan="6" class="text-center">
+                                  Tidak ada data
+                                </td>
+                              </tr>
+                              <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Page content -->
+    </div>
+    <%- include('./partials/footer.ejs') %>

@@ -5,7 +5,9 @@ const questions = require('./questions');
 const answers = require('./answers');
 const users = require('./users');
 const kuisioner = require('./kuisioner');
+const login = require('./auth');
 
+app.use('/auth', login);
 app.use('/', dashboard);
 app.use('/questions', questions);
 app.use('/answers', answers);

@@ -16,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'terlapor_id',
         as: 'terlapor',
       });
+      this.belongsTo(models.Question, {
+        foreignKey: 'question_id',
+        as: 'question',
+      });
+      this.belongsTo(models.QuestionAnswer, {
+        foreignKey: 'answer_id',
+        as: 'answer',
+      });
     }
   }
   Report.init(

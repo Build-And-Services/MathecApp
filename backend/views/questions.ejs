@@ -1,159 +1,121 @@
-<%-include('./partials/header.ejs') %>
-   <!-- Sidenav -->
-   <%-include('./partials/sidenav.ejs')  %>
-   <!-- Main content -->
-   <div class="main-content" id="panel">
-     <!-- Topnav -->
-     <%-include('./partials/navbar.ejs')  %>
-     <!-- Header -->
-     <div class="header bg-primary pb-6">
-       <div class="container-fluid">
-         <div class="header-body">
-           <div class="row align-items-center py-4">
-             <div class="col-lg-6 col-7">
-               <h6 class="h2 text-white d-inline-block mb-0">MaThec</h6>
-               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                   <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-                   <li class="breadcrumb-item"><a href="/questions">Pertanyaan</a></li>
-                 </ol>
-               </nav>
-             </div>
-           </div>
+<%- include('./partials/header.ejs') %>
+  <!-- Sidenav -->
+  <%- include('./partials/sidenav.ejs') %>
+    <!-- Main content -->
+    <div class="main-content" id="panel">
+      <!-- Topnav -->
+      <%- include('./partials/navbar.ejs') %>
+        <!-- Header -->
+        <div class="header bg-primary pb-6">
+          <div class="container-fluid">
+            <div class="header-body">
+              <div class="row align-items-center py-4">
+                <div class="col-lg-6 col-7">
+                  <h6 class="h2 text-white d-inline-block mb-0">MaThec</h6>
+                  <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                    <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                      <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+                      <li class="breadcrumb-item"><a href="/questions">Pertanyaan</a></li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-     <!-- End Header -->
+        <!-- End Header -->
 
-      <!-- Page content -->
-      <div class="container-fluid mt--6">
-        <div class="row">
-         <div class="col">
-           <div class="card">
-             <!-- Card header -->
-             <div class="card-header">
-              <h3 class="mb-0">Data Pelaporan Pertanyaan</h3>
-              <p class="text-sm mb-0">
-                Table untuk melihat data pertanyaan yang dilaporkan oleh user pada website MaThecApp
-              </p>
-             </div>
-             <div class="table-responsive py-4">
-               <table class="table table-flush" id="datatable-basic">
-                 <thead class="thead-light">
-                   <tr>
-                     <th>Pertanyaan</th>
-                     <th>Jenis Laporan</th>
-                     <th>Deskripsi</th>
-                     <th>Pelapor</th>
-                     <th>Bukti</th>
-                     <th>Action</th>
-                   </tr>
-                 </thead>
-                 <tbody>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Heri</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                   <tr>
-                     <td>He anjing gue pengen nanya</td>
-                     <td>Bersifat Sara</td>
-                     <td>Di pertanyaan ini user menggunakan kata-kata kasar</td>
-                     <td>Perdana</td>
-                     <td>Bukti.jpg</td>
-                     <td>
-                      <button class="btn btn-icon btn-danger btn-sm" type="button">
-                      <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
-                      </button>
-                    </td>
-                   </tr>
-                 </tbody>
-               </table>
-             </div>
-           </div>
-         </div>
-       </div>
-      </div>
-      <!-- End Page Content -->
- 
-   </div>
-<%-include('./partials/footer.ejs')  %>
+        <!-- Page content -->
+        <div class="container-fluid mt--6">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <!-- Card header -->
+                <div class="card-header">
+                  <h3 class="mb-0">Data Pelaporan Pertanyaan</h3>
+                  <p class="text-sm mb-0">
+                    Table untuk melihat data pertanyaan yang dilaporkan oleh user pada website MaThecApp
+                  </p>
+                </div>
+                <div class="table-responsive py-4">
+                  <table class="table table-flush" id="datatable-basic">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Pertanyaan</th>
+                        <th>Jenis Laporan</th>
+                        <th>Deskripsi</th>
+                        <th>Pelapor</th>
+                        <th>Bukti</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (reports.length> 0) { %>
+                        <% reports.forEach(function(report) { %>
+                          <tr>
+                            <td>
+                              <%= report.question.title %>
+                            </td>
+                            <td>
+                              <%= report.jenis_laporan %>
+                            </td>
+                            <td>
+                              <%= report.deskripsi.substring(0, 20) + '...' %>
+                            </td>
+                            <td>
+                              <%= report.pelapor.name %>
+                            </td>
+                            <td>
+                              <%= report.bukti_laporan %>
+                            </td>
+                            <td>
+                              <button class="btn btn-icon btn-danger btn-sm" type="button" data-toggle="modal"
+                                data-target="#question-report-<%= report.id %>">
+                                <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                              </button>
+                              <div class="modal fade" id="question-report-<%= report.id %>" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Hapus Pertanyaan</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <p style="text-wrap: wrap; width: 100%; color: black;">
+                                        Jika anda ingin melanjutkan tekan pencet 'Setuju',
+                                        <br> namun akan menghapus semua laporan dan pertanyaan.
+                                      </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Close</button>
+                                      <a href="/questions/delete/<%= report.question.id %>"
+                                        class="btn btn-danger">Setuju</a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <% }) %>
+                            <% } else { %>
+                              <tr>
+                                <td class="text-center" colspan="6">Tidak ada laporan pertanyaan</td>
+                              </tr>
+                              <% } %>
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Page Content -->
+
+    </div>
+    <%- include('./partials/footer.ejs') %>

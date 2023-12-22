@@ -8,6 +8,8 @@ import QuestionRecap from "../components/Recaps/Question/Question";
 import AnswerRecap from "../components/Recaps/Answer/Answer";
 import CardAnswer from "../components/AnswerCard";
 import { BsPlusLg } from "react-icons/bs";
+import { BsExclamationCircleFill } from "react-icons/bs";
+import { Modal, Form, Spinner } from "react-bootstrap";
 
 const UserInfo = () => {
   const { isLoading, userinfoById, userinfo } = useUserStore();
@@ -31,6 +33,36 @@ const UserInfo = () => {
   const timeDiffMonth = (yearCurrent - yearReg) * 12 + monthCurrent - monthReg;
   const timeDIffDay = dayCurrent - dayReg;
   const formattedDate = `${dayReg}-${monthReg}-${yearReg}`;
+
+  const [show, setShow] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [form, setForm] = useState({
+    jenis_laporan: "",
+    deskripsi: "",
+    bukti_laporan: "",
+    terlapor_id: userinfo.id,
+    pelapor_id: user.data.user_id,
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    await fetch(process.env.REACT_APP_API_HOST + "/api/reports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.data.token}`,
+      },
+      body: JSON.stringify({
+        ...form,
+      }),
+    });
+    setTimeout(() => {
+      setLoading(false);
+      handleClose();
+    }, 500);
+  };
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleUserInfo = () => {
     setLoading(true);
@@ -75,7 +107,7 @@ const UserInfo = () => {
           follower_id: id,
           following_id: user.data.user_id,
         }),
-      }
+      },
     );
     const response = await result.json();
 
@@ -120,372 +152,459 @@ const UserInfo = () => {
   }
 
   return (
-    <div className="card h-100">
-      <div className="card-body">
-        <div className="row p-4">
-          <div
-            className="col-md-3 pb-5"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <img
-                src={
-                  userinfo.Profile && userinfo.Profile.profile_picture
-                    ? `${process.env.REACT_APP_API_HOST}/${userinfo.Profile.profile_picture}`
-                    : "https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png"
-                }
-                style={{
-                  width: "200px",
-                  borderRadius: "10%",
-                  objectFit: "cover",
-                }}
-                alt="profile"
-              ></img>
-            </div>
-
+    <>
+      <div className="card h-100">
+        <div className="card-body">
+          <div className="row p-4">
             <div
-              className="card mt-5"
-              style={{
-                boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
-                width: "70%",
-              }}
-            >
-              <div className="card-body">
-                <ul
-                  style={{
-                    listStyle: "none",
-                    width: "100%",
-                  }}
-                >
-                  <li className="fw-bold mb-2">
-                    <Link
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                        fontSize: "16px",
-                      }}
-                      onClick={handleUserInfo}
-                    >
-                      User Info
-                    </Link>
-                  </li>
-                  <li className="fw-bold mb-2">
-                    <Link
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                        fontSize: "16px",
-                      }}
-                      onClick={handleQuestion}
-                    >
-                      Questions
-                    </Link>
-                  </li>
-                  <li className="fw-bold mb-2">
-                    <Link
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                        fontSize: "16px",
-                      }}
-                      onClick={handleAnswer}
-                    >
-                      Answers
-                    </Link>
-                  </li>
-                  <li className="fw-bold mb-2">
-                    <Link
-                      style={{
-                        textDecoration: "none",
-                        color: "black",
-                        fontSize: "16px",
-                      }}
-                      onClick={handleFollowing}
-                    >
-                      Following
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-9">
-            <h1
-              className="fw-bold d-flex align-content-end gap-2"
-              style={{
-                fontSize: "16px",
-              }}
-            >
-              {userinfo.name}{" "}
-              <span
-                style={{
-                  fontSize: "16px",
-                  display: "flex",
-                  alignItems: "start",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  if (JSON.parse(localStorage.getItem("user"))) {
-                    handleFollow();
-                  } else {
-                    alert("Please login first!");
-                  }
-                }}
-              >
-                {!follow ? (
-                  <>
-                    <span
-                      style={{
-                        fontSize: "14px",
-                      }}
-                    >
-                      Follow
-                    </span>
-                    <BsPlusLg
-                      style={{
-                        fontWeight: "bolder",
-                        fontSize: "14px",
-                      }}
-                    />
-                  </>
-                ) : (
-                  <span
-                    style={{
-                      fontSize: "14px",
-                    }}
-                  >
-                    Followed
-                  </span>
-                )}
-              </span>
-            </h1>
-            <div
+              className="col-md-3 pb-5"
               style={{
                 display: "flex",
-                justifyContent: "space-between",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
-              {timeDiffMonth > 11 ? (
-                <div
-                  className="fw-light text-black"
+              <div>
+                <img
+                  src={
+                    userinfo.Profile && userinfo.Profile.profile_picture
+                      ? `${process.env.REACT_APP_API_HOST}/${userinfo.Profile.profile_picture}`
+                      : "https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png"
+                  }
                   style={{
-                    fontSize: "14px",
+                    width: "200px",
+                    borderRadius: "10%",
+                    objectFit: "cover",
                   }}
-                >
-                  <FiCalendar size={20} /> Member From {formattedDate}
-                </div>
-              ) : timeDIffDay < 1 ? (
-                <div
-                  className="fw-light text-black"
-                  style={{
-                    fontSize: "14px",
-                  }}
-                >
-                  <FiCalendar size={20} /> Member for 1 days
-                </div>
-              ) : timeDiffMonth < 1 ? (
-                <div className="fw-light text-black">
-                  <FiCalendar size={20} /> Member for {timeDIffDay} days
-                </div>
-              ) : (
-                <div
-                  className="fw-light text-black"
-                  style={{
-                    fontSize: "14px",
-                  }}
-                >
-                  <FiCalendar size={20} /> Member for {timeDiffMonth} month
-                </div>
-              )}
+                  alt="profile"
+                ></img>
+              </div>
 
               <div
-                className="fw-light text-black"
+                className="card mt-5"
                 style={{
-                  fontSize: "14px",
+                  boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+                  width: "70%",
                 }}
               >
-                {/* <FiMapPin size={20} />
-                {userinfo.Profile && userinfo.Profile.address} */}
-                {""}
-              </div>
-              <div
-                className="fw-light text-black"
-                style={{
-                  fontSize: "14px",
-                }}
-              >
-                {" "}
-              </div>
-            </div>
-            <div>
-              <div
-                className="text-start mt-4"
-                style={{
-                  color: "black",
-                  fontSize: "16px",
-                }}
-              >
-                {userinfo.Profile ? (
-                  userinfo.Profile.about_me ? (
-                    userinfo.Profile.about_me
-                  ) : (
-                    <h4>Biodata not found</h4>
-                  )
-                ) : (
-                  <h4>Biodata not found</h4>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-5">
-              {loading ? (
-                <div className="d-flex align-items-center justify-content-center">
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
+                <div className="card-body">
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      width: "100%",
+                    }}
+                  >
+                    <li className="fw-bold mb-2">
+                      <Link
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                          fontSize: "16px",
+                        }}
+                        onClick={handleUserInfo}
+                      >
+                        User Info
+                      </Link>
+                    </li>
+                    <li className="fw-bold mb-2">
+                      <Link
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                          fontSize: "16px",
+                        }}
+                        onClick={handleQuestion}
+                      >
+                        Questions
+                      </Link>
+                    </li>
+                    <li className="fw-bold mb-2">
+                      <Link
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                          fontSize: "16px",
+                        }}
+                        onClick={handleAnswer}
+                      >
+                        Answers
+                      </Link>
+                    </li>
+                    <li className="fw-bold mb-2">
+                      <Link
+                        style={{
+                          textDecoration: "none",
+                          color: "black",
+                          fontSize: "16px",
+                        }}
+                        onClick={handleFollowing}
+                      >
+                        Following
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
-              ) : component === "UserInfo" ? (
-                <div className="row">
-                  <div className="col-md-6">
-                    <h6
-                      className="fw-bold"
-                      style={{
-                        fontSize: "16px",
-                      }}
-                    >
-                      Questions
-                    </h6>
-                    <div
-                      className="card shadow"
-                      style={{
-                        border: "none",
-                      }}
-                    >
-                      <div className="card-body">
-                        <div
-                          className="col-sm-12"
+              </div>
+            </div>
+            <div className="col-md-9">
+              <div className="d-flex justify-content-between align-items-center">
+                <h1
+                  className="fw-bold d-flex align-content-end gap-2"
+                  style={{
+                    fontSize: "16px",
+                  }}
+                >
+                  {userinfo.name}{" "}
+                  <span
+                    style={{
+                      fontSize: "16px",
+                      display: "flex",
+                      alignItems: "start",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      if (JSON.parse(localStorage.getItem("user"))) {
+                        handleFollow();
+                      } else {
+                        alert("Please login first!");
+                      }
+                    }}
+                  >
+                    {!follow ? (
+                      <>
+                        <span
                           style={{
                             fontSize: "14px",
                           }}
                         >
-                          {userinfo.Questions &&
-                          userinfo.Questions.length === 0 ? (
-                            <p className="mt-3">No data avaible yet</p>
-                          ) : (
-                            userinfo.Questions &&
-                            userinfo.Questions.map((data, index) => (
-                              <CardQuestion key={index} question={data} />
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <h6
-                      className="fw-bold"
-                      style={{
-                        fontSize: "16px",
-                      }}
-                    >
-                      Answers
-                    </h6>
-                    <div
-                      className="card shadow"
-                      style={{
-                        border: "none",
-                      }}
-                    >
-                      <div className="card-body">
-                        <div className="mt-3 col-sm-12">
-                          {userinfo.answers && userinfo.answers.length < 1 ? (
-                            <p
-                              className="mt-3"
-                              style={{
-                                fontSize: "14px",
-                              }}
-                            >
-                              No data avaible yet
-                            </p>
-                          ) : (
-                            userinfo.answers &&
-                            userinfo.answers.map((answer) => (
-                              <div key={answer.id}>
-                                <CardAnswer answer={answer} />
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : component === "Question" ? (
-                <QuestionRecap />
-              ) : component === "Answer" ? (
-                <AnswerRecap />
-              ) : userinfo.followings && userinfo.followings.length === 0 ? (
-                <>
-                  <h5 className="fw-bold">Followings</h5>
-                  <h6>Data not found</h6>
-                </>
-              ) : (
-                <div className="row gap-4">
-                  {userinfo.followings.map((item, index) => {
-                    if (index < 3) {
-                      return (
-                        <div
-                          key={index}
-                          className="card col-lg-2  col-md-3 col-sm-4"
+                          Follow
+                        </span>
+                        <BsPlusLg
                           style={{
-                            cursor: "pointer",
+                            fontWeight: "bolder",
+                            fontSize: "14px",
                           }}
-                          onClick={() => navigate("/userinfo/" + item.id)}
-                        >
+                        />
+                      </>
+                    ) : (
+                      <span
+                        style={{
+                          fontSize: "14px",
+                        }}
+                      >
+                        Followed
+                      </span>
+                    )}
+                  </span>
+                </h1>
+                <div>
+                  <button
+                    style={{
+                      border: "none",
+                      backgroundColor: "white",
+                    }}
+                    data-toggle="modal"
+                    data-target="#exampleModalCenter"
+                    onClick={handleShow}
+                  >
+                    <BsExclamationCircleFill
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      size={20}
+                      color={"#000000"}
+                    />
+                  </button>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                {timeDiffMonth > 11 ? (
+                  <div
+                    className="fw-light text-black"
+                    style={{
+                      fontSize: "14px",
+                    }}
+                  >
+                    <FiCalendar size={20} /> Member From {formattedDate}
+                  </div>
+                ) : timeDIffDay < 1 ? (
+                  <div
+                    className="fw-light text-black"
+                    style={{
+                      fontSize: "14px",
+                    }}
+                  >
+                    <FiCalendar size={20} /> Member for 1 days
+                  </div>
+                ) : timeDiffMonth < 1 ? (
+                  <div className="fw-light text-black">
+                    <FiCalendar size={20} /> Member for {timeDIffDay} days
+                  </div>
+                ) : (
+                  <div
+                    className="fw-light text-black"
+                    style={{
+                      fontSize: "14px",
+                    }}
+                  >
+                    <FiCalendar size={20} /> Member for {timeDiffMonth} month
+                  </div>
+                )}
+
+                <div
+                  className="fw-light text-black"
+                  style={{
+                    fontSize: "14px",
+                  }}
+                >
+                  {/* <FiMapPin size={20} />
+                {userinfo.Profile && userinfo.Profile.address} */}
+                  {""}
+                </div>
+                <div
+                  className="fw-light text-black"
+                  style={{
+                    fontSize: "14px",
+                  }}
+                >
+                  {" "}
+                </div>
+              </div>
+              <div>
+                <div
+                  className="text-start mt-4"
+                  style={{
+                    color: "black",
+                    fontSize: "16px",
+                  }}
+                >
+                  {userinfo.Profile ? (
+                    userinfo.Profile.about_me ? (
+                      userinfo.Profile.about_me
+                    ) : (
+                      <h4>Biodata not found</h4>
+                    )
+                  ) : (
+                    <h4>Biodata not found</h4>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-5">
+                {loading ? (
+                  <div className="d-flex align-items-center justify-content-center">
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                ) : component === "UserInfo" ? (
+                  <div className="row">
+                    <div className="col-md-6">
+                      <h6
+                        className="fw-bold"
+                        style={{
+                          fontSize: "16px",
+                        }}
+                      >
+                        Questions
+                      </h6>
+                      <div
+                        className="card shadow"
+                        style={{
+                          border: "none",
+                        }}
+                      >
+                        <div className="card-body">
                           <div
-                            className="card-body"
+                            className="col-sm-12"
                             style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "center",
-                              alignItems: "center",
+                              fontSize: "14px",
                             }}
                           >
-                            <img
-                              src={
-                                item.Profile && item.Profile.profile_picture
-                                  ? `${process.env.REACT_APP_API_HOST}/${item.Profile.profile_picture}`
-                                  : "https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png"
-                              }
-                              style={{
-                                width: "50px",
-                                height: "50px",
-                                objectFit: "cover",
-                              }}
-                              alt=""
-                            />
-                            <div>
-                              <p className="text-center mt-3 fw-bold">
-                                {item.name}
-                              </p>
-                            </div>
+                            {userinfo.Questions &&
+                            userinfo.Questions.length === 0 ? (
+                              <p className="mt-3">No data avaible yet</p>
+                            ) : (
+                              userinfo.Questions &&
+                              userinfo.Questions.map((data, index) => (
+                                <CardQuestion key={index} question={data} />
+                              ))
+                            )}
                           </div>
                         </div>
-                      );
-                    }
-                    return <></>;
-                  })}
-                </div>
-              )}
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <h6
+                        className="fw-bold"
+                        style={{
+                          fontSize: "16px",
+                        }}
+                      >
+                        Answers
+                      </h6>
+                      <div
+                        className="card shadow"
+                        style={{
+                          border: "none",
+                        }}
+                      >
+                        <div className="card-body">
+                          <div className="mt-3 col-sm-12">
+                            {userinfo.answers && userinfo.answers.length < 1 ? (
+                              <p
+                                className="mt-3"
+                                style={{
+                                  fontSize: "14px",
+                                }}
+                              >
+                                No data avaible yet
+                              </p>
+                            ) : (
+                              userinfo.answers &&
+                              userinfo.answers.map((answer) => (
+                                <div key={answer.id}>
+                                  <CardAnswer answer={answer} />
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : component === "Question" ? (
+                  <QuestionRecap />
+                ) : component === "Answer" ? (
+                  <AnswerRecap />
+                ) : userinfo.followings && userinfo.followings.length === 0 ? (
+                  <>
+                    <h5 className="fw-bold">Followings</h5>
+                    <h6>Data not found</h6>
+                  </>
+                ) : (
+                  <div className="row gap-4">
+                    {userinfo.followings.map((item, index) => {
+                      if (index < 3) {
+                        return (
+                          <div
+                            key={index}
+                            className="card col-lg-2  col-md-3 col-sm-4"
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            onClick={() => navigate("/userinfo/" + item.id)}
+                          >
+                            <div
+                              className="card-body"
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <img
+                                src={
+                                  item.Profile && item.Profile.profile_picture
+                                    ? `${process.env.REACT_APP_API_HOST}/${item.Profile.profile_picture}`
+                                    : "https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png"
+                                }
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  objectFit: "cover",
+                                }}
+                                alt=""
+                              />
+                              <div>
+                                <p className="text-center mt-3 fw-bold">
+                                  {item.name}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return <></>;
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <Modal
+        show={show}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton onClick={handleClose}>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Form Pelaporan
+          </Modal.Title>
+        </Modal.Header>
+        <form onSubmit={handleSubmit}>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Jenis Pelanggaran</Form.Label>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) =>
+                  setForm((prevstate) => {
+                    return { ...prevstate, jenis_laporan: e.target.value };
+                  })
+                }
+              >
+                <option>Pilih Jenis Pelanggaran</option>
+                <option value="bersifat sara">Bersifat Sara</option>
+                <option value="bersifat pornografi">Bersifat Pornografi</option>
+                <option value="bersifat spam">Bersifat Spam</option>
+                <option value="bersifat politik">Bersifat Politik</option>
+                <option value="bersifat provokatif">Bersifat Provokatif</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Deskripsi</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                onChange={(e) =>
+                  setForm((prevstate) => {
+                    return { ...prevstate, deskripsi: e.target.value };
+                  })
+                }
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Bukti</Form.Label>
+              <Form.Control type="file" />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <button type="submit" className="btn btn-primary">
+              {loading ? (
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              ) : (
+                "Laporkan"
+              )}
+            </button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+    </>
   );
 };
 

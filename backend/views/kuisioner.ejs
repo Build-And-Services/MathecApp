@@ -65,44 +65,6 @@
                                     data-target="#kuisioner-report">
                                     <span class="btn-inner--text"><i class="fa fa-eye fa-1x m-0"></i> Lihat</span>
                                   </button>
-                                  <div class="modal fade" id="kuisioner-report" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner
-                                          </h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                          </button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <table class="table">
-                                            <thead>
-                                              <tr>
-                                                <th>name user</th>
-                                                <th>nilai</th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr>
-                                                <th>Heri Setyawan</th>
-                                                <th>4</th>
-                                              </tr>
-                                              <tr>
-                                                <th>Perdana Putro H</th>
-                                                <th>3</th>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Close</button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
                                 </td>
                               </tr>
                               <%});%>
@@ -117,6 +79,46 @@
           </div>
         </div>
         <!-- Page content -->
+
+        <% kuisioners.forEach(kuisioner=> { %>
+          <div class="modal fade" id="kuisioner-report" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>name user</th>
+                        <th>nilai</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Heri Setyawan</th>
+                        <th>4</th>
+                      </tr>
+                      <tr>
+                        <th>Perdana Putro H</th>
+                        <th>3</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }) %>
 
     </div>
     <%- include('./partials/footer.ejs') %>

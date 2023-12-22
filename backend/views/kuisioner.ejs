@@ -36,6 +36,7 @@
                       <table class="table table-flush" id="datatable-buttons">
                         <thead class="thead-light">
                           <tr>
+                            <th>No.</th>
                             <th>Judul</th>
                             <th>Kategori</th>
                             <th>Nilai</th>
@@ -45,55 +46,66 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>1000</td>
-                            <td>61</td>
-                            <td>
-                              <button class="btn btn-icon btn-primary btn-sm" type="button" data-toggle="modal"
-                                data-target="#kuisioner-report">
-                                <span class="btn-inner--text"><i class="fa fa-eye fa-1x m-0"></i> Lihat</span>
-                              </button>
-                              <div class="modal fade" id="kuisioner-report" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <table class="table">
-                                        <thead>
-                                          <tr>
-                                            <th>name user</th>
-                                            <th>nilai</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <th>Heri Setyawan</th>
-                                            <th>4</th>
-                                          </tr>
-                                          <tr>
-                                            <th>Perdana Putro H</th>
-                                            <th>3</th>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Close</button>
+                          <% let no=1 %>
+                            <% kuisioners.forEach(kuisioner=> { %>
+                              <tr>
+                                <td>
+                                  <%= no++ %>
+                                </td>
+                                <td>
+                                  <%= kuisioner.questioner %>
+                                </td>
+                                <td>
+                                  <%= kuisioner.category.name %>
+                                </td>
+                                <td>1000</td>
+                                <td>61</td>
+                                <td>
+                                  <button class="btn btn-icon btn-primary btn-sm" type="button" data-toggle="modal"
+                                    data-target="#kuisioner-report">
+                                    <span class="btn-inner--text"><i class="fa fa-eye fa-1x m-0"></i> Lihat</span>
+                                  </button>
+                                  <div class="modal fade" id="kuisioner-report" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner
+                                          </h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <table class="table">
+                                            <thead>
+                                              <tr>
+                                                <th>name user</th>
+                                                <th>nilai</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr>
+                                                <th>Heri Setyawan</th>
+                                                <th>4</th>
+                                              </tr>
+                                              <tr>
+                                                <th>Perdana Putro H</th>
+                                                <th>3</th>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
+                              <%});%>
                         </tbody>
                       </table>
                     </div>

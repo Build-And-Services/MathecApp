@@ -1,23 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { Op } = require('sequelize');
-const cheerio = require('cheerio');
-const verify = require('./../../middleware/verify');
-const { Report, QuestionAnswer, User } = require('@models');
+const { Op } = require("sequelize");
+const cheerio = require("cheerio");
+const verify = require("./../../middleware/verify");
+const { Report, QuestionAnswer, User } = require("@models");
 
 router.use(verify);
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   const answerReport = await Report.findAll({
     include: [
       {
         model: User,
-        as: 'pelapor',
-        attributes: ['name'],
+        as: "pelapor",
+        attributes: ["name"],
       },
       {
         model: QuestionAnswer,
-        as: 'answer',
-        attributes: ['id', 'title', 'body'],
+        as: "answer",
+        attributes: ["id", "title", "body"],
       },
     ],
     where: {
@@ -38,17 +38,17 @@ router.get('/', async (req, res) => {
       bukti_laporan: d.bukti_laporan,
     };
   });
-  const nama = 'Pengguna';
-  res.render('answers', {
+  const nama = "Pengguna";
+  res.render("answers", {
     nama,
-    title: 'Mathec | Answer',
-    page_name: 'answers',
+    title: "Mathec | Answer",
+    page_name: "answers",
     admin: req.session.admin,
     reports: transformedData,
   });
 });
 
-router.get('/delete/:id', async (req, res) => {
+router.get("/delete/:id", async (req, res) => {
   const { id } = req.params;
   await Report.destroy({
     where: {
@@ -60,6 +60,6 @@ router.get('/delete/:id', async (req, res) => {
       id,
     },
   });
-  res.redirect('/questions');
+  res.redirect("/questions");
 });
 module.exports = router;

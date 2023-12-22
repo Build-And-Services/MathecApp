@@ -36,11 +36,11 @@ router.get('/', async (req, res) => {
   });
 });
 
-router.get('/delete/:id/:idreport', async (req, res) => {
-  const { id, idreport } = req.params;
+router.get('/delete/:id', async (req, res) => {
+  const { id } = req.params;
   await Report.destroy({
     where: {
-      id: idreport,
+      terlapor_id: id,
     },
   });
   await User.destroy({

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('QuestionAnswers', {
+    await queryInterface.createTable("QuestionAnswers", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,21 +13,21 @@ module.exports = {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'Questions',
-          key: 'id',
+          model: "Questions",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       user_id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         references: {
-          model: 'Users',
-          key: 'id',
+          model: "Users",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       accepted: {
         type: Sequelize.BOOLEAN,
@@ -53,9 +53,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('QuestionAnswers');
+    await queryInterface.dropTable("QuestionAnswers");
   },
 };

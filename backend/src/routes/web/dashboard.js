@@ -1,30 +1,39 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const verify = require('./../../middleware/verify');
-const { QuestionAnswer, Question, User } = require('@models');
+const { Sequelize } = require("sequelize");
+const verify = require("./../../middleware/verify");
+const { QuestionAnswer, Question, User, LinkertScore } = require("@models");
 
 router.use(verify);
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const [questionsCount, answersCount, usersCount] = await Promise.all([
-      Question.count(),
-      QuestionAnswer.count(),
-      User.count(),
-    ]);
+    const [questionsCount, answersCount, usersCount, linkertscore] =
+      await Promise.all([
+        Question.count(),
+        QuestionAnswer.count(),
+        User.count(),
+        LinkertScore.findAll({
+          attributes: [[Sequelize.fn("COUNT", Sequelize.col("id")), "total"]],
+          group: ["id_user"],
+        }),
+      ]);
 
-    res.render('index', {
-      title: 'Mathec | Dashboard',
-      page_name: 'dashboard',
+    const userFilled = linkertscore.length;
+
+    res.render("index", {
+      title: "Mathec | Dashboard",
+      page_name: "dashboard",
       admin: req.session.admin,
       data: {
         questions: questionsCount,
         answers: answersCount,
         users: usersCount,
+        kuisioners: (userFilled / usersCount) * 100,
       },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Terjadi kesalahan' });
+    res.status(500).json({ message: "Terjadi kesalahan" });
   }
 });
 

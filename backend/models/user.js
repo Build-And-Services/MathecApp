@@ -1,6 +1,6 @@
-'use strict';
-const { Model } = require('sequelize');
-const Profile = require('./profile');
+"use strict";
+const { Model } = require("sequelize");
+const Profile = require("./profile");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -9,14 +9,33 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Profile, { foreignKey: 'profile_id' });
-      this.hasMany(models.Question, { foreignKey: 'user_id' });
+      this.belongsTo(models.Profile, { foreignKey: "profile_id" });
+      this.hasMany(models.Question, { foreignKey: "user_id" });
       this.hasMany(models.QuestionAnswer, {
-        foreignKey: 'user_id',
+        foreignKey: "user_id",
       });
-      this.belongsToMany(models.User, { as: 'followings', through: 'Follow', foreignKey: 'following_id' });
-      this.belongsToMany(models.User, { as: 'followers', through: 'Follow', foreignKey: 'follower_id' });
-      // this.belongsToMany(this.User, { as: 'Followings', through: this.Follower, foreignKey: 'follower_id' });
+      this.belongsToMany(models.User, {
+        as: "followings",
+        through: "Follow",
+        foreignKey: "following_id",
+      });
+      this.belongsToMany(models.User, {
+        as: "followers",
+        through: "Follow",
+        foreignKey: "follower_id",
+      });
+
+      this.hasMany(models.LinkertScore, {
+        foreignKey: "id_user",
+        as: "linkertScore",
+      });
+
+      this.belongsToMany(models.Questioner, {
+        through: "LinkertScore",
+        foreignKey: "id_user",
+        otherKey: "id_questioner",
+        as: "questioner",
+      });
     }
   }
   User.init(
@@ -31,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: Profile,
-          key: 'id',
+          key: "id",
         },
       },
       name: DataTypes.STRING,
@@ -40,10 +59,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'User',
-      tableName: 'Users',
+      modelName: "User",
+      tableName: "Users",
       underscored: true,
-    }
+    },
   );
   return User;
 };

@@ -6,6 +6,7 @@ const {
   Questioner,
   CategoryQuestioner,
   LinkertScore,
+  Profile,
 } = require("@models");
 
 router.use(verify);
@@ -33,7 +34,18 @@ router.get("/", async (req, res) => {
       ],
     });
 
-    const transformedData = kuisioners.map((d) => {
+    const users = await User.findAll({
+      include: [
+        {
+          model: LinkertScore,
+          as: "linkertScore",
+          attributes: ["score"],
+        },
+      ],
+      attributes: ["id", "name", "email"],
+    });
+
+    const transformedData = users.map((d) => {
       const total_score = d.linkertScore.map((d) => d.score);
       const user = total_score.length;
       const score = total_score.reduce((previous, current) => {
@@ -44,21 +56,15 @@ router.get("/", async (req, res) => {
 
       return {
         id: d.id,
-        questioner: d.questioner,
-        category: d.category.name,
+        name: d.name,
+        email: d.email,
         score,
         total: user,
-        linkertScore: d.linkertScore.map((item) => {
-          return {
-            user: item.user.name,
-            score: item.score,
-          };
-        }),
       };
     });
 
     const nama = "Pengguna";
-    res.render("kuisioner", {
+    return res.render("kuisioner", {
       nama,
       title: "Mathec | Kuisioner",
       page_name: "kuisioner",
@@ -67,7 +73,37 @@ router.get("/", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Terjadi kesalahan" });
+    return res.status(500).json({ message: "Terjadi kesalahan" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: Questioner,
+          as: "questioner",
+        },
+        Profile,
+      ],
+    });
+
+    return res.render("detail_kuisioner", {
+      title: "Mathec | " + user.name,
+      page_name: "kuisioner",
+      admin: req.session.admin,
+      user,
+    });
+  } catch (error) {
+    return res.render("error", {
+      message: "Terjadi kesalahan",
+      error: error,
+    });
   }
 });
 

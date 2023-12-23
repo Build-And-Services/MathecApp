@@ -33,14 +33,14 @@
                       </p>
                     </div>
                     <div class="table-responsive py-4">
-                      <table class="table table-flush" id="datatable-buttons">
+                      <table class="table table-flush" id="datatable-basic">
                         <thead class="thead-light">
                           <tr>
                             <th>No.</th>
-                            <th>Judul</th>
-                            <th>Kategori</th>
+                            <th>Nama</th>
+                            <th>Jumlah</th>
                             <th>Nilai</th>
-                            <th>Jumlah User</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -53,16 +53,21 @@
                                   <%= no++ %>
                                 </td>
                                 <td>
-                                  <%= kuisioner.questioner %>
+                                  <%= kuisioner.name %>
                                 </td>
                                 <td>
-                                  <%= kuisioner.category %>
+                                  <%= kuisioner.total %>
                                 </td>
                                 <td>
                                   <%= kuisioner.score %>
                                 </td>
                                 <td>
-                                  <%= kuisioner.total %>
+                                  <a href="/kuisioner/<%= kuisioner.id %>"
+                                      class="btn btn-sm btn-primary"
+                                  >
+                                    <i class="fas fa-eye"></i>
+                                    Lihat
+                                  </a>
                                 </td>
                               </tr>
                               <%});%>
@@ -77,44 +82,5 @@
           </div>
         </div>
         <!-- Page content -->
-
-        <% kuisioners.forEach(kuisioner=> { %>
-          <div class="modal fade" id="kuisioner-report-<%= kuisioner.id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner
-                  </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>name user</th>
-                        <th>nilai</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    <% kuisioner.linkertScore.forEach(item => { %>
-                      <tr>
-                        <th><%= item.user %></th>
-                        <th><%= item.score %></th>
-                      </tr>
-                    <% }) %>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <% }) %>
-
     </div>
     <%- include('./partials/footer.ejs') %>

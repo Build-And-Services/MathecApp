@@ -1,6 +1,6 @@
-'use strict';
-const { Model } = require('sequelize');
-const User = require('./user');
+"use strict";
+const { Model } = require("sequelize");
+const User = require("./user");
 module.exports = (sequelize, DataTypes) => {
   class Question extends Model {
     /**
@@ -9,17 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.User, { foreignKey: 'user_id' });
+      this.belongsTo(models.User, { foreignKey: "user_id" });
       this.belongsToMany(models.Tag, {
         through: models.QuestionTag,
-        as: 'tag',
-        foreignKey: 'question_id',
+        as: "tag",
+        foreignKey: "question_id",
       });
       this.hasMany(models.QuestionAnswer, {
-        foreignKey: 'question_id',
+        foreignKey: "question_id",
       });
       this.hasMany(models.UserAction, {
-        foreignKey: 'question_id',
+        foreignKey: "question_id",
       });
     }
   }
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: User,
-          key: 'id',
+          key: "id",
         },
       },
       title: DataTypes.STRING,
@@ -44,13 +44,14 @@ module.exports = (sequelize, DataTypes) => {
       dislike: DataTypes.INTEGER,
       view_count: DataTypes.INTEGER,
       vote_count: DataTypes.INTEGER,
+      deleted_at: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: 'Question',
-      tableName: 'Questions',
+      modelName: "Question",
+      tableName: "Questions",
       underscored: true,
-    }
+    },
   );
   return Question;
 };

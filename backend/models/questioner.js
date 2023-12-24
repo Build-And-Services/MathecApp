@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Questioner extends Model {
     /**
@@ -9,8 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.CategoryQuestioner, {
+<<<<<<< HEAD
         foreignKey: 'id_category_questioner',
         as: 'category',
+=======
+        foreignKey: "id_category_questioner",
+        as: "category",
+      });
+      this.hasMany(models.LinkertScore, {
+        foreignKey: "id_questioner",
+        as: "linkertScore",
+>>>>>>> 470671078cae94574d6293260eefbfc6eec2891b
       });
     }
   }
@@ -21,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Questioner',
-      tableName: 'Questioners',
+      modelName: "Questioner",
+      tableName: "Questioners",
       underscored: true,
-    }
+    },
   );
   return Questioner;
 };

@@ -1,7 +1,7 @@
-'use strict';
-const { Model } = require('sequelize');
-const Question = require('./question');
-const User = require('./user');
+"use strict";
+const { Model } = require("sequelize");
+const Question = require("./question");
+const User = require("./user");
 module.exports = (sequelize, DataTypes) => {
   class QuestionAnswer extends Model {
     /**
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.Question, {
-        foreignKey: 'question_id',
+        foreignKey: "question_id",
       });
       this.belongsTo(models.User, {
-        foreignKey: 'user_id',
+        foreignKey: "user_id",
       });
     }
   }
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: Question,
-          key: 'id',
+          key: "id",
         },
       },
       user_id: {
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: User,
-          key: 'id',
+          key: "id",
         },
       },
       accepted: DataTypes.BOOLEAN,
@@ -46,13 +46,14 @@ module.exports = (sequelize, DataTypes) => {
       body: DataTypes.TEXT,
       vote_count: DataTypes.INTEGER,
       like_count: DataTypes.INTEGER,
+      deleted_at: DataTypes.DATE,
     },
     {
       sequelize,
-      modelName: 'QuestionAnswer',
-      tableName: 'QuestionAnswers',
+      modelName: "QuestionAnswer",
+      tableName: "QuestionAnswers",
       underscored: true,
-    }
+    },
   );
   return QuestionAnswer;
 };

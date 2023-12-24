@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
       },
     ],
     where: {
-      pelapor_id: {
+      answer_id: {
         [Op.not]: null,
       },
     },

@@ -33,38 +33,41 @@
                       </p>
                     </div>
                     <div class="table-responsive py-4">
-                      <table class="table table-flush" id="datatable-buttons">
+                      <table class="table table-flush" id="datatable-basic">
                         <thead class="thead-light">
                           <tr>
                             <th>No.</th>
-                            <th>Judul</th>
-                            <th>Kategori</th>
+                            <th>Nama</th>
+                            <th>Jumlah</th>
                             <th>Nilai</th>
-                            <th>Jumlah User</th>
                             <th>Action</th>
-
                           </tr>
                         </thead>
                         <tbody>
                           <% let no=1 %>
                             <% kuisioners.forEach(kuisioner=> { %>
-                              <tr>
+                              <tr style="cursor:pointer"  
+                                  data-toggle="modal" 
+                                  data-target="#kuisioner-report-<%= kuisioner.id %>">
                                 <td>
                                   <%= no++ %>
                                 </td>
                                 <td>
-                                  <%= kuisioner.questioner %>
+                                  <%= kuisioner.name %>
                                 </td>
                                 <td>
-                                  <%= kuisioner.category.name %>
+                                  <%= kuisioner.total %>
                                 </td>
-                                <td>1000</td>
-                                <td>61</td>
                                 <td>
-                                  <button class="btn btn-icon btn-primary btn-sm" type="button" data-toggle="modal"
-                                    data-target="#kuisioner-report">
-                                    <span class="btn-inner--text"><i class="fa fa-eye fa-1x m-0"></i> Lihat</span>
-                                  </button>
+                                  <%= kuisioner.score %>
+                                </td>
+                                <td>
+                                  <a href="/kuisioner/<%= kuisioner.id %>"
+                                      class="btn btn-sm btn-primary"
+                                  >
+                                    <i class="fas fa-eye"></i>
+                                    Lihat
+                                  </a>
                                 </td>
                               </tr>
                               <%});%>
@@ -78,87 +81,6 @@
             </div>
           </div>
         </div>
-
-        <% kuisioners.forEach(kuisioner=> { %>
-          <div class="modal fade" id="kuisioner-report" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner
-                  </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>name user</th>
-                        <th>nilai</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th>Heri Setyawan</th>
-                        <th>4</th>
-                      </tr>
-                      <tr>
-                        <th>Perdana Putro H</th>
-                        <th>3</th>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <% }) %>
-            <!-- Page content -->
-
-        <% kuisioners.forEach(kuisioner=> { %>
-          <div class="modal fade" id="kuisioner-report" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Detail Pertanyaan Kuisioner
-                  </h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>name user</th>
-                        <th>nilai</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th>Heri Setyawan</th>
-                        <th>4</th>
-                      </tr>
-                      <tr>
-                        <th>Perdana Putro H</th>
-                        <th>3</th>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <% }) %>
-
+        <!-- Page content -->
     </div>
     <%- include('./partials/footer.ejs') %>

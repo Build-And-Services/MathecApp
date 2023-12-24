@@ -1,49 +1,41 @@
 const express = require("express");
 const router = express.Router();
 const verify = require("./../../middleware/verify");
-const {
-  User,
-  Questioner,
-  CategoryQuestioner,
-  LinkertScore,
-  Profile,
-} = require("@models");
+const { User, Questioner, Report, LinkertScore, Profile } = require("@models");
 
 router.use(verify);
 router.get("/", async (req, res) => {
   try {
-    const kuisioners = await Questioner.findAll({
-      include: [
-        {
-          model: CategoryQuestioner,
-          as: "category",
-          attributes: ["name"],
+    const [notifications, users] = await Promise.all([
+      Report.findAll({
+        where: {
+          read: false,
         },
-        {
-          model: LinkertScore,
-          as: "linkertScore",
-          attributes: ["score"],
-          include: [
-            {
-              model: User,
-              as: "user",
-              attributes: ["name"],
-            },
-          ],
-        },
-      ],
-    });
-
-    const users = await User.findAll({
-      include: [
-        {
-          model: LinkertScore,
-          as: "linkertScore",
-          attributes: ["score"],
-        },
-      ],
-      attributes: ["id", "name", "email"],
-    });
+        include: [
+          {
+            model: User,
+            as: "pelapor",
+            paranoid: false,
+            include: [
+              {
+                model: Profile,
+                as: "Profile",
+              },
+            ],
+          },
+        ],
+      }),
+      User.findAll({
+        include: [
+          {
+            model: LinkertScore,
+            as: "linkertScore",
+            attributes: ["score"],
+          },
+        ],
+        attributes: ["id", "name", "email"],
+      }),
+    ]);
 
     const transformedData = users.map((d) => {
       const total_score = d.linkertScore.map((d) => d.score);
@@ -70,6 +62,7 @@ router.get("/", async (req, res) => {
       page_name: "kuisioner",
       admin: req.session.admin,
       kuisioners: transformedData,
+      notifications,
     });
   } catch (error) {
     console.error(error);

@@ -52,9 +52,13 @@
                     </thead>
                     <tbody>
                       <% reports.forEach((report)=> { %>
+                        <% if(report.read){ %>
+                          <tr>
+                        <% }else{ %>
+                          <tr class="bg-primary text-white"> 
+                        <% } %>
                         
-                        <tr>
-                          <td>
+                          <td <%= report.read %>>
                             <%- report.answer %>
                           </td>
                           <td>

@@ -54,7 +54,11 @@
                     </thead>
                     <tbody>
                       <% if (reports.length> 0) { %> <% reports.forEach(function(report) { %>
+                          <% if(report.read){ %>
                           <tr>
+                          <% }else{ %>
+                          <tr class="bg-primary text-white"> 
+                          <% } %>
                             <td>
                               <%= report.terlapor.name %>
                             </td>

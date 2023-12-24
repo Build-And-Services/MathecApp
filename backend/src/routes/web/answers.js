@@ -3,30 +3,52 @@ const router = express.Router();
 const { Op } = require("sequelize");
 const cheerio = require("cheerio");
 const verify = require("./../../middleware/verify");
-const { Report, QuestionAnswer, User } = require("@models");
+const { Report, QuestionAnswer, User, Profile } = require("@models");
 
 router.use(verify);
 router.get("/", async (req, res) => {
-  const answerReport = await Report.findAll({
-    include: [
-      {
-        model: User,
-        as: "pelapor",
-        attributes: ["name"],
+  const [notifications, answerReport] = await Promise.all([
+    Report.findAll({
+      where: {
+        read: false,
       },
-      {
-        model: QuestionAnswer,
-        as: "answer",
-        attributes: ["id", "title", "body", "deleted_at"],
-        paranoid: false,
+      include: [
+        {
+          model: User,
+          as: "pelapor",
+          paranoid: false,
+          include: [
+            {
+              model: Profile,
+              as: "Profile",
+            },
+          ],
+        },
+      ],
+    }),
+    Report.findAll({
+      include: [
+        {
+          model: User,
+          as: "pelapor",
+          paranoid: false,
+          attributes: ["name"],
+        },
+        {
+          model: QuestionAnswer,
+          as: "answer",
+          attributes: ["id", "title", "body", "deleted_at"],
+          paranoid: false,
+        },
+      ],
+      where: {
+        answer_id: {
+          [Op.not]: null,
+        },
       },
-    ],
-    where: {
-      answer_id: {
-        [Op.not]: null,
-      },
-    },
-  });
+    }),
+  ]);
+
   const transformedData = answerReport.map((d) => {
     const $ = cheerio.load(d.answer.body);
     return {
@@ -38,15 +60,32 @@ router.get("/", async (req, res) => {
       pelapor: d.pelapor.name,
       bukti_laporan: d.bukti_laporan,
       deleted_at: d.answer.deleted_at,
+      read: d.read,
     };
   });
+
+  await Report.update(
+    {
+      read: true,
+    },
+    {
+      where: {
+        answer_id: {
+          [Op.not]: null,
+        },
+        read: false,
+      },
+    },
+  );
+
   const nama = "Pengguna";
-  res.render("answers", {
+  return res.render("answers", {
     nama,
     title: "Mathec | Answer",
     page_name: "answers",
     admin: req.session.admin,
     reports: transformedData,
+    notifications,
   });
 });
 

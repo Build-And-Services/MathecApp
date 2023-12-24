@@ -2,41 +2,73 @@ const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
 const verify = require("./../../middleware/verify");
-const { Report, User } = require("@models");
+const { Report, User, Profile } = require("@models");
 
 router.use(verify);
 router.get("/", async (req, res) => {
-  const userReport = await Report.findAll({
-    include: [
-      {
-        model: User,
-        as: "pelapor",
-        attributes: ["name"],
+  const [notifications, userReport] = await Promise.all([
+    Report.findAll({
+      where: {
+        read: false,
       },
-      {
-        model: User,
-        as: "terlapor",
-        attributes: ["id", "name", "deleted_at"],
-        paranoid: false,
+      include: [
+        {
+          model: User,
+          as: "pelapor",
+          paranoid: false,
+          include: [
+            {
+              model: Profile,
+              as: "Profile",
+            },
+          ],
+        },
+      ],
+    }),
+    Report.findAll({
+      include: [
+        {
+          model: User,
+          as: "pelapor",
+          paranoid: false,
+          attributes: ["name"],
+        },
+        {
+          model: User,
+          as: "terlapor",
+          attributes: ["id", "name", "deleted_at"],
+          paranoid: false,
+        },
+      ],
+      where: {
+        terlapor_id: {
+          [Op.not]: null,
+        },
       },
-    ],
-    where: {
-      terlapor_id: {
-        [Op.not]: null,
+    }),
+  ]);
+  await Report.update(
+    {
+      read: true,
+    },
+    {
+      where: {
+        terlapor_id: {
+          [Op.not]: null,
+        },
+        read: false,
       },
     },
-  });
-
+  );
   const nama = "Pengguna";
-  // res.status(500).json({
-  //   userReport,
-  // });
+
   res.render("users", {
     nama,
     title: "Mathec | Users",
     page_name: "users",
     admin: req.session.admin,
     reports: userReport,
+    notifications,
   });
 });
 

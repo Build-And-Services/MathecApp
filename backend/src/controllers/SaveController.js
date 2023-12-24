@@ -1,21 +1,28 @@
-const { QueryTypes } = require('sequelize');
-const { UserAction, Question, User, Profile, Tag, QuestionAnswer } = require('@models');
-const cheerio = require('cheerio');
+const { QueryTypes } = require("sequelize");
+const {
+  UserAction,
+  Question,
+  User,
+  Profile,
+  Tag,
+  QuestionAnswer,
+} = require("@models");
+const cheerio = require("cheerio");
 
 class SaveController {
   static async saveById(req, res) {
     const { id, order } = req.params;
 
-    let orderClause = ['id', 'ASC'];
-    if (order == 'long') {
-      orderClause = ['createdAt', 'DESC'];
-    } else if (order == 'new') {
-      orderClause = ['createdAt', 'ASC'];
+    let orderClause = ["id", "ASC"];
+    if (order == "long") {
+      orderClause = ["createdAt", "DESC"];
+    } else if (order == "new") {
+      orderClause = ["createdAt", "ASC"];
     }
     const saved = await UserAction.findAll({
       where: {
         user_id: id,
-        type_judge: 'saved',
+        type_judge: "saved",
       },
       include: [
         {
@@ -23,17 +30,18 @@ class SaveController {
           include: [
             {
               model: User,
-              attributes: ['name'],
+              attributes: ["name"],
+              paranoid: false,
               include: [
                 {
                   model: Profile,
-                  attributes: ['profile_picture'],
+                  attributes: ["profile_picture"],
                 },
               ],
             },
             {
               model: Tag,
-              as: 'tag',
+              as: "tag",
             },
             {
               model: QuestionAnswer,
@@ -47,7 +55,7 @@ class SaveController {
       order: [orderClause],
     });
 
-    const savedTransform = saved.map(item => {
+    const savedTransform = saved.map((item) => {
       const $ = cheerio.load(item.Question.body);
 
       return {
@@ -70,7 +78,7 @@ class SaveController {
     return res.json({
       code: 200,
       success: true,
-      message: 'Save Fetched',
+      message: "Save Fetched",
       data: savedTransform,
     });
   }

@@ -46,11 +46,13 @@
                         <th>Deskripsi</th>
                         <th>Pelapor</th>
                         <th>Bukti</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <% reports.forEach((report)=> { %>
+                        
                         <tr>
                           <td>
                             <%- report.answer %>
@@ -69,9 +71,20 @@
                             <%= report.bukti_laporan %>
                           </td>
                           <td>
-                            <button class="btn btn-icon btn-danger btn-sm" type="button" data-toggle="modal"
+                            <% if(report.deleted_at == null) { %>
+                              <span class="badge badge-danger">
+                                belum diblokir
+                              </span>
+                            <% } else { %>
+                              <span class="badge badge-success">
+                                sudah di blokir
+                              </span>
+                            <% } %>
+                          </td>
+                          <td>
+                            <button  <%= report.deleted_at !== null ? 'disabled' : '' %> class="btn btn-icon btn-danger btn-sm" type="button" data-toggle="modal"
                               data-target="#answer-report-<%= report.id %>">
-                              <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
+                              <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Tangguhkan</span>
                             </button>
                             <div class="modal fade" id="answer-report-<%= report.id %>" tabindex="-1"
                               aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -85,8 +98,7 @@
                                   </div>
                                   <div class="modal-body">
                                     <p style="text-wrap: wrap; width: 100%; color: black;">
-                                      Jika anda ingin melanjutkan tekan pencet 'Setuju',
-                                      <br> namun akan menghapus semua laporan dan jawaban.
+                                      Jika anda ingin melanjutkan tekan pencet 'Setuju'.
                                     </p>
                                   </div>
                                   <div class="modal-footer">

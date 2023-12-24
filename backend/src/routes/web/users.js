@@ -16,7 +16,8 @@ router.get("/", async (req, res) => {
       {
         model: User,
         as: "terlapor",
-        attributes: ["id", "name"],
+        attributes: ["id", "name", "deleted_at"],
+        paranoid: false,
       },
     ],
     where: {
@@ -40,18 +41,25 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/delete/:id", async (req, res) => {
-  const { id } = req.params;
-  await Report.destroy({
-    where: {
-      terlapor_id: id,
-    },
-  });
-  await User.destroy({
-    where: {
-      id,
-    },
-  });
-  res.redirect("/users");
+  try {
+    const { id } = req.params;
+    await User.update(
+      {
+        deleted_at: new Date(),
+      },
+      {
+        where: {
+          id,
+        },
+      },
+    );
+    res.redirect("/users");
+  } catch (error) {
+    return res.render("error", {
+      message: "Terjadi Kesalahan",
+      error: error,
+    });
+  }
 });
 
 module.exports = router;

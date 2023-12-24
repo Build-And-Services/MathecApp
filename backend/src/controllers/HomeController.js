@@ -1,6 +1,15 @@
-const { Question, Tag, QuestionTag, User, Profile, QuestionAnswer, sequelize, UserAction } = require('@models'); // Import model Question
-const cheerio = require('cheerio');
-const { Op, QueryTypes } = require('sequelize');
+const {
+  Question,
+  Tag,
+  QuestionTag,
+  User,
+  Profile,
+  QuestionAnswer,
+  sequelize,
+  UserAction,
+} = require("@models"); // Import model Question
+const cheerio = require("cheerio");
+const { Op, QueryTypes } = require("sequelize");
 class HomeController {
   static async getAll(req, res) {
     try {
@@ -29,29 +38,47 @@ class HomeController {
       let whereClause = {};
 
       if (req.params.keyword) {
-        if (req.params.keyword == 'hot') {
-          orderClause = [['like', 'DESC']];
-        } else if (req.params.keyword == 'hot_news') {
-          orderClause = [['like', 'DESC']];
+        if (req.params.keyword == "hot") {
+          orderClause = [["like", "DESC"]];
+        } else if (req.params.keyword == "hot_news") {
+          orderClause = [["like", "DESC"]];
           const today = new Date();
-          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-          const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          const firstDayOfMonth = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            1,
+          );
+          const lastDayOfMonth = new Date(
+            today.getFullYear(),
+            today.getMonth() + 1,
+            0,
+          );
           const data = await Question.findAll({
-            attributes: ['id', 'title', 'body', 'like', 'dislike', 'view_count', 'vote_count', 'createdAt'],
+            attributes: [
+              "id",
+              "title",
+              "body",
+              "like",
+              "dislike",
+              "view_count",
+              "vote_count",
+              "createdAt",
+            ],
             include: [
               {
                 model: User,
-                attributes: ['name'],
+                attributes: ["name"],
+                paranoid: false,
                 include: [
                   {
                     model: Profile,
-                    attributes: ['profile_picture'],
+                    attributes: ["profile_picture"],
                   },
                 ],
               },
               {
                 model: Tag,
-                as: 'tag',
+                as: "tag",
               },
               {
                 model: QuestionAnswer,
@@ -65,7 +92,7 @@ class HomeController {
             },
             limit: 5,
           });
-          const transformedData = data.map(d => {
+          const transformedData = data.map((d) => {
             const $ = cheerio.load(d.body);
             return {
               question_id: d.id,
@@ -73,7 +100,7 @@ class HomeController {
               profile_picture: d.User.Profile.profile_picture,
               title: d.title,
               body: $.text(),
-              tags: d.tag.map(t => {
+              tags: d.tag.map((t) => {
                 return {
                   tag_name: t.tag_name,
                 };
@@ -89,11 +116,14 @@ class HomeController {
           return res.json({
             code: 200,
             success: true,
-            message: 'Questions Fetched',
+            message: "Questions Fetched",
             data: transformedData,
           });
-        } else if (req.params.keyword == 'weeks' || req.params.keyword == 'month') {
-          if (req.params.keyword == 'weeks') {
+        } else if (
+          req.params.keyword == "weeks" ||
+          req.params.keyword == "month"
+        ) {
+          if (req.params.keyword == "weeks") {
             const satuMingguLalu = new Date();
             // Menghitung tanggal satu minggu yang lalu
             satuMingguLalu.setDate(satuMingguLalu.getDate() - 7);
@@ -110,34 +140,34 @@ class HomeController {
               [Op.gte]: bulanLalu, // Lebih besar atau sama dengan satu bulan yang lalu
             };
           }
-        } else if (req.params.keyword == 'all') {
+        } else if (req.params.keyword == "all") {
           // Tampilkan semua pertanyaan
-          orderClause = [['created_at', 'DESC']];
-        } else if (req.params.keyword == 'answer') {
+          orderClause = [["created_at", "DESC"]];
+        } else if (req.params.keyword == "answer") {
           const questionIdsWithAnswers = await QuestionAnswer.findAll({
-            attributes: ['question_id'],
+            attributes: ["question_id"],
           });
           whereClause.id = {
-            [Op.in]: questionIdsWithAnswers.map(answer => answer.question_id),
+            [Op.in]: questionIdsWithAnswers.map((answer) => answer.question_id),
           };
-        } else if (req.params.keyword == 'tag_populer') {
+        } else if (req.params.keyword == "tag_populer") {
           const currentYear = new Date().getFullYear();
           const currentMonth = new Date().getMonth() + 1;
           const popularQuestions = await sequelize.query(
-            'SELECT Q.title, Q.body, T.tag_name, COUNT(QT.tag_id) AS tag_count ' +
+            "SELECT Q.title, Q.body, T.tag_name, COUNT(QT.tag_id) AS tag_count " +
               'FROM "QuestionTags" QT ' +
               'INNER JOIN "Questions" Q ON Q.id = QT.question_id ' +
               'INNER JOIN "Tags" T ON QT.tag_id = T.id ' +
               "WHERE DATE_PART('year', Q.created_at) = :year " +
               "AND DATE_PART('month', Q.created_at) = :month " +
-              'GROUP BY Q.title, Q.body, T.tag_name ' +
-              'ORDER BY tag_count DESC;',
+              "GROUP BY Q.title, Q.body, T.tag_name " +
+              "ORDER BY tag_count DESC;",
             {
               type: QueryTypes.SELECT,
               replacements: { year: currentYear, month: currentMonth },
-            }
+            },
           );
-          const transformedData = popularQuestions.map(d => {
+          const transformedData = popularQuestions.map((d) => {
             const $ = cheerio.load(d.body);
             return {
               question_id: d.id,
@@ -151,15 +181,19 @@ class HomeController {
           return res.json({
             code: 200,
             success: true,
-            message: 'Questions Fetched',
+            message: "Questions Fetched",
             data: transformedData,
           });
-        } else if (req.params.keyword == 'tag_new') {
+        } else if (req.params.keyword == "tag_new") {
           const newQuestions = await sequelize.query(
-            'SELECT Q.title, Q.body, T.tag_name ' + 'FROM "Questions" Q ' + 'INNER JOIN "QuestionTags" QT ON Q.id = QT.question_id ' + 'INNER JOIN "Tags" T ON QT.tag_id = T.id ' + 'ORDER BY QT.created_at DESC;',
-            { type: QueryTypes.SELECT }
+            "SELECT Q.title, Q.body, T.tag_name " +
+              'FROM "Questions" Q ' +
+              'INNER JOIN "QuestionTags" QT ON Q.id = QT.question_id ' +
+              'INNER JOIN "Tags" T ON QT.tag_id = T.id ' +
+              "ORDER BY QT.created_at DESC;",
+            { type: QueryTypes.SELECT },
           );
-          const transformedData = newQuestions.map(d => {
+          const transformedData = newQuestions.map((d) => {
             const $ = cheerio.load(d.body);
             return {
               question_id: d.id,
@@ -172,15 +206,19 @@ class HomeController {
           return res.json({
             code: 200,
             success: true,
-            message: 'Questions Fetched',
+            message: "Questions Fetched",
             data: transformedData,
           });
-        } else if (req.params.keyword == 'tag_long') {
+        } else if (req.params.keyword == "tag_long") {
           const newQuestions = await sequelize.query(
-            'SELECT Q.title, Q.body, T.tag_name ' + 'FROM "Questions" Q ' + 'INNER JOIN "QuestionTags" QT ON Q.id = QT.question_id ' + 'INNER JOIN "Tags" T ON QT.tag_id = T.id ' + 'ORDER BY QT.created_at ASC;',
-            { type: QueryTypes.SELECT }
+            "SELECT Q.title, Q.body, T.tag_name " +
+              'FROM "Questions" Q ' +
+              'INNER JOIN "QuestionTags" QT ON Q.id = QT.question_id ' +
+              'INNER JOIN "Tags" T ON QT.tag_id = T.id ' +
+              "ORDER BY QT.created_at ASC;",
+            { type: QueryTypes.SELECT },
           );
-          const transformedData = newQuestions.map(d => {
+          const transformedData = newQuestions.map((d) => {
             const $ = cheerio.load(d.body);
             return {
               question_id: d.id,
@@ -193,26 +231,36 @@ class HomeController {
           return res.json({
             code: 200,
             success: true,
-            message: 'Questions Fetched',
+            message: "Questions Fetched",
             data: transformedData,
           });
-        } else if (req.params.keyword == 'answer') {
+        } else if (req.params.keyword == "answer") {
           const data = await Question.findAll({
-            attributes: ['id', 'title', 'body', 'like', 'dislike', 'view_count', 'vote_count', 'createdAt'],
+            attributes: [
+              "id",
+              "title",
+              "body",
+              "like",
+              "dislike",
+              "view_count",
+              "vote_count",
+              "createdAt",
+            ],
             include: [
               {
                 model: User,
-                attributes: ['name'],
+                attributes: ["name"],
+                paranoid: false,
                 include: [
                   {
                     model: Profile,
-                    attributes: ['profile_picture'],
+                    attributes: ["profile_picture"],
                   },
                 ],
               },
               {
                 model: Tag,
-                as: 'tag',
+                as: "tag",
               },
               {
                 model: QuestionAnswer,
@@ -221,7 +269,7 @@ class HomeController {
             order: orderClause,
             where: whereClause,
           });
-          const transformedData = data.map(d => {
+          const transformedData = data.map((d) => {
             const $ = cheerio.load(d.body);
             return {
               question_id: d.id,
@@ -229,7 +277,7 @@ class HomeController {
               profile_picture: d.User.Profile.profile_picture,
               title: d.title,
               body: $.text(),
-              tags: d.tag.map(t => {
+              tags: d.tag.map((t) => {
                 return {
                   tag_name: t.tag_name,
                 };
@@ -243,30 +291,42 @@ class HomeController {
             };
           });
 
-          transformedData = transformedData.filter(item => item.answer_total > 0);
+          transformedData = transformedData.filter(
+            (item) => item.answer_total > 0,
+          );
           return res.json({
             code: 200,
             success: true,
-            message: 'Questions Fetched',
+            message: "Questions Fetched",
             data: transformedData,
           });
-        } else if (req.params.keyword == 'no_answer') {
+        } else if (req.params.keyword == "no_answer") {
           const data = await Question.findAll({
-            attributes: ['id', 'title', 'body', 'like', 'dislike', 'view_count', 'vote_count', 'createdAt'],
+            attributes: [
+              "id",
+              "title",
+              "body",
+              "like",
+              "dislike",
+              "view_count",
+              "vote_count",
+              "createdAt",
+            ],
             include: [
               {
                 model: User,
-                attributes: ['name'],
+                attributes: ["name"],
+                paranoid: false,
                 include: [
                   {
                     model: Profile,
-                    attributes: ['profile_picture'],
+                    attributes: ["profile_picture"],
                   },
                 ],
               },
               {
                 model: Tag,
-                as: 'tag',
+                as: "tag",
               },
               {
                 model: QuestionAnswer,
@@ -278,7 +338,7 @@ class HomeController {
             order: orderClause,
             where: whereClause,
           });
-          let transformedData = data.map(d => {
+          let transformedData = data.map((d) => {
             const $ = cheerio.load(d.body);
             return {
               question_id: d.id,
@@ -287,7 +347,7 @@ class HomeController {
               title: d.title,
               body: $.text(),
               tags: d.tag
-                .map(t => {
+                .map((t) => {
                   return {
                     tag_name: t.tag_name,
                   };
@@ -303,32 +363,44 @@ class HomeController {
             };
           });
 
-          transformedData = transformedData.filter(item => item.answer_total == 0);
+          transformedData = transformedData.filter(
+            (item) => item.answer_total == 0,
+          );
 
           return res.json({
             code: 200,
             success: true,
-            message: 'Questions Fetched',
+            message: "Questions Fetched",
             data: transformedData,
           });
         }
       }
       const data = await Question.findAll({
-        attributes: ['id', 'title', 'body', 'like', 'dislike', 'view_count', 'vote_count', 'createdAt'],
+        attributes: [
+          "id",
+          "title",
+          "body",
+          "like",
+          "dislike",
+          "view_count",
+          "vote_count",
+          "createdAt",
+        ],
         include: [
           {
             model: User,
-            attributes: ['name'],
+            attributes: ["name"],
+            paranoid: false,
             include: [
               {
                 model: Profile,
-                attributes: ['profile_picture'],
+                attributes: ["profile_picture"],
               },
             ],
           },
           {
             model: Tag,
-            as: 'tag',
+            as: "tag",
           },
           {
             model: QuestionAnswer,
@@ -340,7 +412,7 @@ class HomeController {
         order: orderClause,
         where: whereClause,
       });
-      const transformedData = data.map(d => {
+      const transformedData = data.map((d) => {
         const $ = cheerio.load(d.body);
         return {
           question_id: d.id,
@@ -349,7 +421,7 @@ class HomeController {
           title: d.title,
           body: $.text(),
           tags: d.tag
-            .map(t => {
+            .map((t) => {
               return {
                 tag_name: t.tag_name,
               };
@@ -367,7 +439,7 @@ class HomeController {
       return res.json({
         code: 200,
         success: true,
-        message: 'Questions Fetched',
+        message: "Questions Fetched",
         data: transformedData,
       });
     } catch (err) {
@@ -379,21 +451,31 @@ class HomeController {
   static async getMonth(req, res) {
     const { from, to } = req.params;
     const result = await Question.findAll({
-      attributes: ['id', 'title', 'body', 'like', 'dislike', 'view_count', 'vote_count', 'createdAt'],
+      attributes: [
+        "id",
+        "title",
+        "body",
+        "like",
+        "dislike",
+        "view_count",
+        "vote_count",
+        "createdAt",
+      ],
       include: [
         {
           model: User,
-          attributes: ['name'],
+          attributes: ["name"],
+          paranoid: false,
           include: [
             {
               model: Profile,
-              attributes: ['profile_picture'],
+              attributes: ["profile_picture"],
             },
           ],
         },
         {
           model: Tag,
-          as: 'tag',
+          as: "tag",
         },
         {
           model: QuestionAnswer,
@@ -409,7 +491,7 @@ class HomeController {
         },
       },
     });
-    const transformedData = result.map(d => {
+    const transformedData = result.map((d) => {
       const $ = cheerio.load(d.body);
       return {
         question_id: d.id,
@@ -418,7 +500,7 @@ class HomeController {
         title: d.title,
         body: $.text(),
         tags: d.tag
-          .map(t => {
+          .map((t) => {
             return {
               tag_name: t.tag_name,
             };
@@ -435,7 +517,7 @@ class HomeController {
     });
 
     return res.status(200).json({
-      message: 'Fetched Questions',
+      message: "Fetched Questions",
       data: transformedData,
     });
   }
@@ -473,7 +555,7 @@ class HomeController {
     });
 
     return res.status(200).json({
-      message: 'The result from search',
+      message: "The result from search",
       questions,
       users,
       tags,

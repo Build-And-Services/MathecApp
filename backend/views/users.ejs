@@ -48,6 +48,7 @@
                         <th>Deskripsi</th>
                         <th>Pelapor</th>
                         <th>Bukti</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -72,12 +73,22 @@
                               <%= report.bukti_laporan %>
                             </td>
                             <td>
+                            <% if(report.terlapor.deleted_at == null) { %>
+                              <span class="badge badge-danger">
+                                belum diblokir
+                              </span>
+                            <% } else { %>
+                              <span class="badge badge-success">
+                                sudah di blokir
+                              </span>
+                            <% } %>
+                          </td>
+                            <td>
                               <button class="btn btn-icon btn-primary btn-sm" type="button" data-toggle="modal"
                                 data-target="#user-report-<%= report.id %>">
                                 <span class="btn-inner--text"><i class="fa fa-eye fa-1x m-0"></i> Lihat</span>
                               </button>
-                              <a href="/users/delete/<%= report.terlapor.id %>" class="btn btn-icon btn-danger btn-sm"
-                                type="button">
+                              <a <%= report.terlapor.deleted_at !== null ? 'id="btn-block"'  : '' %> class="btn btn-icon btn-danger btn-sm" href="/users/delete/<%= report.terlapor.id %>">
                                 <span class="btn-inner--text"><i class="fa fa-trash fa-1x m-0"></i> Delete</span>
                               </a>
                             </td>

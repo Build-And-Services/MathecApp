@@ -17,7 +17,8 @@ router.get("/", async (req, res) => {
       {
         model: QuestionAnswer,
         as: "answer",
-        attributes: ["id", "title", "body"],
+        attributes: ["id", "title", "body", "deleted_at"],
+        paranoid: false,
       },
     ],
     where: {
@@ -36,6 +37,7 @@ router.get("/", async (req, res) => {
       deskripsi: d.deskripsi,
       pelapor: d.pelapor.name,
       bukti_laporan: d.bukti_laporan,
+      deleted_at: d.answer.deleted_at,
     };
   });
   const nama = "Pengguna";
@@ -50,16 +52,17 @@ router.get("/", async (req, res) => {
 
 router.get("/delete/:id", async (req, res) => {
   const { id } = req.params;
-  await Report.destroy({
-    where: {
-      answer_id: id,
+
+  await QuestionAnswer.update(
+    {
+      deleted_at: new Date(),
     },
-  });
-  await QuestionAnswer.destroy({
-    where: {
-      id,
+    {
+      where: {
+        id,
+      },
     },
-  });
-  res.redirect("/questions");
+  );
+  res.redirect("/answers");
 });
 module.exports = router;

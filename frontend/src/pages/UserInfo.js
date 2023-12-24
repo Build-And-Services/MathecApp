@@ -40,7 +40,7 @@ const UserInfo = () => {
     jenis_laporan: "",
     deskripsi: "",
     bukti_laporan: "",
-    terlapor_id: userinfo.id,
+    terlapor_id: id,
     pelapor_id: user.data.user_id,
   });
   const handleSubmit = async (e) => {

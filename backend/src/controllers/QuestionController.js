@@ -1,14 +1,23 @@
-const { Question, QuestionTag, User, Tag, UserAction, Profile, QuestionAnswer, ActionAnswer } = require('@models'); // Import model Question
-const bodyParser = require('body-parser');
-const uploadImageFromBase64 = require('../utils/uploadImageFromBase64');
+const {
+  Question,
+  QuestionTag,
+  User,
+  Tag,
+  UserAction,
+  Profile,
+  QuestionAnswer,
+  ActionAnswer,
+} = require("@models"); // Import model Question
+const bodyParser = require("body-parser");
+const uploadImageFromBase64 = require("../utils/uploadImageFromBase64");
 
 class QuestionController {
   static async getTagId(request, data) {
     let idTags = [];
     // Buat array request menjadi lowercase.
-    request = request.map(r => r.toLowerCase());
+    request = request.map((r) => r.toLowerCase());
 
-    data.forEach(d => {
+    data.forEach((d) => {
       if (request.includes(d.tag_name.toLowerCase())) {
         idTags.push(d.id);
       }
@@ -18,8 +27,8 @@ class QuestionController {
     let missingTags = [];
 
     // Periksa apakah setiap tag dalam request ada di database.
-    request.forEach(async r => {
-      if (!data.some(d => d.tag_name.toLowerCase() === r.toLowerCase())) {
+    request.forEach(async (r) => {
+      if (!data.some((d) => d.tag_name.toLowerCase() === r.toLowerCase())) {
         missingTags.push(r);
       }
     });
@@ -27,12 +36,12 @@ class QuestionController {
     // Buat tag baru untuk setiap tag yang hilang di database.
     if (missingTags.length > 0) {
       const newTags = await Tag.bulkCreate(
-        missingTags.map(r => ({ tag_name: r })),
-        { fields: ['tag_name'] }
+        missingTags.map((r) => ({ tag_name: r })),
+        { fields: ["tag_name"] },
       );
 
       // Tambahkan ID tag baru ke array idTags.
-      newTags.forEach(t => {
+      newTags.forEach((t) => {
         idTags.push(t.id);
       });
     }
@@ -54,7 +63,7 @@ class QuestionController {
     return res.json({
       code: 201,
       success: true,
-      message: 'Answered',
+      message: "Answered",
     });
   }
   static async getQuestionById(req, res) {
@@ -64,33 +73,42 @@ class QuestionController {
         where: {
           id,
         },
-        attributes: ['id', 'title', 'body', 'like', 'dislike', 'view_count', 'createdAt'],
+        attributes: [
+          "id",
+          "title",
+          "body",
+          "like",
+          "dislike",
+          "view_count",
+          "createdAt",
+        ],
         include: [
           {
             model: User,
-            attributes: ['name'],
+            attributes: ["name"],
+            paranoid: false,
             include: [
               {
                 model: Profile,
-                attributes: ['profile_picture'],
+                attributes: ["profile_picture"],
               },
             ],
           },
           {
             model: Tag,
-            as: 'tag',
+            as: "tag",
           },
         ],
       });
 
       let orderClause = [];
-      if (req.params.keyword == 'hot') {
-        orderClause = [['like_count', 'DESC']];
-      } else if (req.params.keyword == 'new') {
-        orderClause = [['createdAt', 'DESC']];
-      } else if (req.params.keyword == 'long') {
-        orderClause = [['createdAt', 'ASC']];
-      } else if (req.params.keyword == 'all') {
+      if (req.params.keyword == "hot") {
+        orderClause = [["like_count", "DESC"]];
+      } else if (req.params.keyword == "new") {
+        orderClause = [["createdAt", "DESC"]];
+      } else if (req.params.keyword == "long") {
+        orderClause = [["createdAt", "ASC"]];
+      } else if (req.params.keyword == "all") {
       }
 
       const answers = await QuestionAnswer.findAll({
@@ -100,7 +118,8 @@ class QuestionController {
         include: [
           {
             model: User,
-            attributes: ['name'],
+            attributes: ["name"],
+            paranoid: false,
             include: [
               {
                 model: Profile,
@@ -118,7 +137,7 @@ class QuestionController {
           profile_picture: data.User.Profile.profile_picture,
           title: data.title,
           body: data.body,
-          tags: data.tag.map(t => {
+          tags: data.tag.map((t) => {
             return {
               tag_name: t.tag_name,
             };
@@ -135,7 +154,7 @@ class QuestionController {
       return res.json({
         code: 200,
         success: true,
-        message: 'Question Fetched',
+        message: "Question Fetched",
         data: transformedData,
       });
     } catch (err) {
@@ -172,7 +191,7 @@ class QuestionController {
         return res.json({
           code: 201,
           success: true,
-          message: 'Question Added',
+          message: "Question Added",
         });
       } catch (err) {
         return res.status(500).json({
@@ -180,8 +199,8 @@ class QuestionController {
         });
       }
     } catch (error) {
-      console.error('Error:', error);
-      return res.status(500).json({ message: 'Internal server error' });
+      console.error("Error:", error);
+      return res.status(500).json({ message: "Internal server error" });
     }
   }
 
@@ -197,7 +216,7 @@ class QuestionController {
       if (!findQuestion) {
         return res.status(404).json({
           success: false,
-          message: 'Data Question Not Found',
+          message: "Data Question Not Found",
         });
       }
 
@@ -208,7 +227,7 @@ class QuestionController {
         },
         {
           where: { id },
-        }
+        },
       );
       try {
         for (let i = 0; i < getIds.length; i++) {
@@ -220,7 +239,7 @@ class QuestionController {
         return res.json({
           code: 201,
           success: true,
-          message: 'Question Updated',
+          message: "Question Updated",
         });
       } catch (err) {
         return res.status(500).json({
@@ -230,7 +249,7 @@ class QuestionController {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        status: 'Internal Server Error',
+        status: "Internal Server Error",
         message: error.message,
       });
     }
@@ -244,15 +263,15 @@ class QuestionController {
       res.status(500).json({
         code: 500,
         success: false,
-        message: 'The questions is not found',
+        message: "The questions is not found",
       });
     }
 
     const action = await UserAction.findOne({
-      where: { question_id, user_id, type_judge: 'like' },
+      where: { question_id, user_id, type_judge: "like" },
     });
     const judgeIsExist = await UserAction.findOne({
-      where: { question_id, user_id, type_judge: 'dislike' },
+      where: { question_id, user_id, type_judge: "dislike" },
     });
 
     if (action) {
@@ -266,14 +285,14 @@ class QuestionController {
       res.status(201).json({
         code: 201,
         success: true,
-        message: 'Questions like cancel',
+        message: "Questions like cancel",
         data: question,
       });
     } else {
       await UserAction.create({
         question_id,
         user_id,
-        type_judge: 'like',
+        type_judge: "like",
       });
       if (judgeIsExist) {
         await UserAction.destroy({ where: { id: judgeIsExist.id } });
@@ -284,7 +303,7 @@ class QuestionController {
       res.status(201).json({
         code: 201,
         success: true,
-        message: 'Questions liked',
+        message: "Questions liked",
         data: question,
       });
     }
@@ -298,15 +317,15 @@ class QuestionController {
       res.status(500).json({
         code: 500,
         success: false,
-        message: 'The questions is not found',
+        message: "The questions is not found",
       });
     }
 
     const action = await UserAction.findOne({
-      where: { question_id, user_id, type_judge: 'dislike' },
+      where: { question_id, user_id, type_judge: "dislike" },
     });
     const judgeIsxist = await UserAction.findOne({
-      where: { question_id, user_id, type_judge: 'like' },
+      where: { question_id, user_id, type_judge: "like" },
     });
     if (action) {
       question.dislike--;
@@ -315,14 +334,14 @@ class QuestionController {
       res.status(201).json({
         code: 201,
         success: true,
-        message: 'Questions dislike cancel',
+        message: "Questions dislike cancel",
         data: question,
       });
     } else {
       await UserAction.create({
         question_id,
         user_id,
-        type_judge: 'dislike',
+        type_judge: "dislike",
       });
       if (judgeIsxist) {
         await UserAction.destroy({ where: { id: judgeIsxist.id } });
@@ -333,7 +352,7 @@ class QuestionController {
       res.status(201).json({
         code: 201,
         success: true,
-        message: 'Questions disliked',
+        message: "Questions disliked",
         data: question,
       });
     }
@@ -346,12 +365,12 @@ class QuestionController {
       res.status(500).json({
         code: 500,
         success: false,
-        message: 'The questions is not found',
+        message: "The questions is not found",
       });
     }
 
     const action = await UserAction.findOne({
-      where: { question_id, user_id, type_judge: 'saved' },
+      where: { question_id, user_id, type_judge: "saved" },
     });
     if (action) {
       question.vote_count--;
@@ -360,21 +379,21 @@ class QuestionController {
       res.status(201).json({
         code: 201,
         success: true,
-        message: 'Questions saved cancel',
+        message: "Questions saved cancel",
         data: question,
       });
     } else {
       await UserAction.create({
         question_id,
         user_id,
-        type_judge: 'saved',
+        type_judge: "saved",
       });
       question.vote_count++;
       await question.save();
       res.status(201).json({
         code: 201,
         success: true,
-        message: 'Questions saved',
+        message: "Questions saved",
         data: question,
       });
     }
@@ -388,7 +407,7 @@ class QuestionController {
     await question.save();
 
     return res.status(200).json({
-      message: 'view question has been add',
+      message: "view question has been add",
     });
   }
 
@@ -400,7 +419,7 @@ class QuestionController {
     });
 
     return res.status(200).json({
-      message: 'Questions has deleted',
+      message: "Questions has deleted",
     });
   }
 
@@ -410,7 +429,7 @@ class QuestionController {
       where: {
         user_id: user_id,
         answer_id,
-        type: 'like',
+        type: "like",
       },
     });
 
@@ -418,13 +437,13 @@ class QuestionController {
       where: {
         user_id: user_id,
         answer_id,
-        type: 'dislike',
+        type: "dislike",
       },
     });
 
     if (existLike) {
       return res.status(200).json({
-        message: 'You have been like',
+        message: "You have been like",
       });
     }
 
@@ -448,7 +467,7 @@ class QuestionController {
           const data = await ActionAnswer.create({
             user_id: user_id,
             answer_id: answer_id,
-            type: 'like',
+            type: "like",
           });
         }
       }
@@ -459,7 +478,7 @@ class QuestionController {
     }
 
     return res.status(200).json({
-      message: 'Success to like',
+      message: "Success to like",
     });
   }
 
@@ -470,7 +489,7 @@ class QuestionController {
       where: {
         user_id: user_id,
         answer_id,
-        type: 'like',
+        type: "like",
       },
     });
 
@@ -478,13 +497,13 @@ class QuestionController {
       where: {
         user_id: user_id,
         answer_id,
-        type: 'dislike',
+        type: "dislike",
       },
     });
 
     if (existDisike) {
       return res.status(200).json({
-        message: 'You have been like',
+        message: "You have been like",
       });
     }
 
@@ -503,12 +522,12 @@ class QuestionController {
       const data = await ActionAnswer.create({
         user_id: user_id,
         answer_id: answer_id,
-        type: 'dislike',
+        type: "dislike",
       });
     }
 
     return res.status(200).json({
-      message: 'yet like this answer',
+      message: "yet like this answer",
     });
   }
 
@@ -518,13 +537,13 @@ class QuestionController {
       const answerId = await QuestionAnswer.findByPk(id);
       return res.status(200).json({
         success: true,
-        message: 'Fetch data answer success',
+        message: "Fetch data answer success",
         data: answerId,
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: 'Internal server error',
+        message: "Internal server error",
       });
     }
   }
@@ -538,17 +557,17 @@ class QuestionController {
         {
           body: html,
         },
-        { where: { id } }
+        { where: { id } },
       );
 
       return res.status(200).json({
         success: true,
-        message: 'Data answer success updated',
+        message: "Data answer success updated",
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: 'Internal server error',
+        message: "Internal server error",
       });
     }
   }
@@ -559,12 +578,12 @@ class QuestionController {
       await QuestionAnswer.destroy({ where: { id } });
       return res.status(200).json({
         success: true,
-        message: 'Delete answer success',
+        message: "Delete answer success",
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: 'Internal server error',
+        message: "Internal server error",
       });
     }
   }

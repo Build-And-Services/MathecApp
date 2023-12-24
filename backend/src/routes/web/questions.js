@@ -1,22 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { Op } = require('sequelize');
-const verify = require('./../../middleware/verify');
-const { Report, Question, User } = require('@models');
+const { Op } = require("sequelize");
+const verify = require("./../../middleware/verify");
+const { Report, Question, User } = require("@models");
 
 router.use(verify);
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   const questionReport = await Report.findAll({
     include: [
       {
         model: User,
-        as: 'pelapor',
-        attributes: ['name'],
+        as: "pelapor",
+        attributes: ["name"],
       },
       {
         model: Question,
-        as: 'question',
-        attributes: ['id', 'title', 'body'],
+        as: "question",
+        attributes: ["id", "title", "body", "deleted_at"],
+        paranoid: false,
       },
     ],
     where: {
@@ -25,29 +26,30 @@ router.get('/', async (req, res) => {
       },
     },
   });
-  const nama = 'Pengguna';
-  res.render('questions', {
+  const nama = "Pengguna";
+  res.render("questions", {
     nama,
-    title: 'Mathec | Question',
-    page_name: 'questions',
+    title: "Mathec | Question",
+    page_name: "questions",
     admin: req.session.admin,
     reports: questionReport,
   });
 });
 
-router.get('/delete/:id', async (req, res) => {
+router.get("/delete/:id", async (req, res) => {
   const { id } = req.params;
-  await Report.destroy({
-    where: {
-      question_id: id,
+
+  await Question.update(
+    {
+      deleted_at: new Date(),
     },
-  });
-  await Question.destroy({
-    where: {
-      id,
+    {
+      where: {
+        id,
+      },
     },
-  });
-  res.redirect('/questions');
+  );
+  res.redirect("/questions");
 });
 
 module.exports = router;

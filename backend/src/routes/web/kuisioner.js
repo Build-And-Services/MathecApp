@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const verify = require('./../../middleware/verify');
 const { User, Questioner, CategoryQuestioner, LinkertScore, Profile } = require('@models');
+const puppeteer = require('puppeteer');
+const ejs = require('ejs');
 
 router.use(verify);
 router.get('/', async (req, res) => {
@@ -93,6 +95,42 @@ router.get('/:id', async (req, res) => {
       admin: req.session.admin,
       user,
     });
+  } catch (error) {
+    return res.render('error', {
+      message: 'Terjadi kesalahan',
+      error: error,
+    });
+  }
+});
+
+// print pdf
+router.get('/:id/print', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findOne({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: Questioner,
+          as: 'questioner',
+        },
+        Profile,
+      ],
+    });
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const html = await ejs.renderFile('views/pdf/template.ejs', {
+      admin: req.session.admin,
+      title: 'kuisioner' + user.name,
+      user,
+    });
+    await page.setContent(html);
+    const bufferPdf = await page.pdf({ format: 'A4', printBackground: true });
+    browser.close();
+    res.contentType('application/pdf');
+    res.send(bufferPdf);
   } catch (error) {
     return res.render('error', {
       message: 'Terjadi kesalahan',

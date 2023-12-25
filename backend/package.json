@@ -41,6 +41,7 @@
     "path": "^0.12.7",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
+    "puppeteer": "^21.6.1",
     "req-flash": "^0.0.3",
     "sequelize": "^6.33.0",
     "sequelize-cli": "^6.6.1"

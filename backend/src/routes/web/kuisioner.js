@@ -29,17 +29,36 @@ router.get('/', async (req, res) => {
         },
       ],
     });
-
-    const users = await User.findAll({
-      include: [
-        {
-          model: LinkertScore,
-          as: 'linkertScore',
-          attributes: ['score'],
+    const [notifications, users] = await Promise.all([
+      Report.findAll({
+        where: {
+          read: false,
         },
-      ],
-      attributes: ['id', 'name', 'email'],
-    });
+        include: [
+          {
+            model: User,
+            as: 'pelapor',
+            paranoid: false,
+            include: [
+              {
+                model: Profile,
+                as: 'Profile',
+              },
+            ],
+          },
+        ],
+      }),
+      User.findAll({
+        include: [
+          {
+            model: LinkertScore,
+            as: 'linkertScore',
+            attributes: ['score'],
+          },
+        ],
+        attributes: ['id', 'name', 'email'],
+      }),
+    ]);
 
     const transformedData = users.map(d => {
       const total_score = d.linkertScore.map(d => d.score);
@@ -66,6 +85,7 @@ router.get('/', async (req, res) => {
       page_name: 'kuisioner',
       admin: req.session.admin,
       kuisioners: transformedData,
+      notifications,
     });
   } catch (error) {
     console.error(error);

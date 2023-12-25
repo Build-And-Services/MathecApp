@@ -46,9 +46,11 @@
                         <tbody>
                           <% let no=1 %>
                             <% kuisioners.forEach(kuisioner=> { %>
-                              <tr style="cursor:pointer"  
+                              
+                                <tr style="cursor:pointer"  
                                   data-toggle="modal" 
                                   data-target="#kuisioner-report-<%= kuisioner.id %>">
+                            
                                 <td>
                                   <%= no++ %>
                                 </td>

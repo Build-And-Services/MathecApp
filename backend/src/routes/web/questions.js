@@ -2,30 +2,66 @@ const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
 const verify = require("./../../middleware/verify");
-const { Report, Question, User } = require("@models");
+const { Report, Question, User, Profile } = require("@models");
 
 router.use(verify);
 router.get("/", async (req, res) => {
-  const questionReport = await Report.findAll({
-    include: [
-      {
-        model: User,
-        as: "pelapor",
-        attributes: ["name"],
+  const [notifications, questionReport] = await Promise.all([
+    Report.findAll({
+      where: {
+        read: false,
       },
-      {
-        model: Question,
-        as: "question",
-        attributes: ["id", "title", "body", "deleted_at"],
-        paranoid: false,
+      include: [
+        {
+          model: User,
+          as: "pelapor",
+          paranoid: false,
+          include: [
+            {
+              model: Profile,
+              as: "Profile",
+            },
+          ],
+        },
+      ],
+    }),
+    Report.findAll({
+      include: [
+        {
+          model: User,
+          as: "pelapor",
+          paranoid: false,
+          attributes: ["name"],
+        },
+        {
+          model: Question,
+          as: "question",
+          attributes: ["id", "title", "body", "deleted_at"],
+          paranoid: false,
+        },
+      ],
+      where: {
+        question_id: {
+          [Op.not]: null,
+        },
       },
-    ],
-    where: {
-      question_id: {
-        [Op.not]: null,
+    }),
+  ]);
+
+  await Report.update(
+    {
+      read: true,
+    },
+    {
+      where: {
+        question_id: {
+          [Op.not]: null,
+        },
+        read: false,
       },
     },
-  });
+  );
+
   const nama = "Pengguna";
   res.render("questions", {
     nama,
@@ -33,6 +69,7 @@ router.get("/", async (req, res) => {
     page_name: "questions",
     admin: req.session.admin,
     reports: questionReport,
+    notifications,
   });
 });
 

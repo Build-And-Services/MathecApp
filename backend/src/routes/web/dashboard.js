@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { Sequelize } = require('sequelize');
 const verify = require('./../../middleware/verify');
-const { QuestionAnswer, Question, User, LinkertScore } = require('@models');
+const { QuestionAnswer, Question, User, LinkertScore, Report, Profile } = require('@models');
 
 router.use(verify);
 router.get('/', async (req, res) => {
   try {
-    const [questionsCount, answersCount, usersCount, linkertscore] = await Promise.all([
+    const [questionsCount, answersCount, usersCount, linkertscore, notifications] = await Promise.all([
       Question.count(),
       QuestionAnswer.count(),
       User.count(),
@@ -15,11 +15,29 @@ router.get('/', async (req, res) => {
         attributes: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'total']],
         group: ['id_user'],
       }),
+      Report.findAll({
+        where: {
+          read: false,
+        },
+        include: [
+          {
+            model: User,
+            as: 'pelapor',
+            paranoid: false,
+            include: [
+              {
+                model: Profile,
+                as: 'Profile',
+              },
+            ],
+          },
+        ],
+      }),
     ]);
 
     const userFilled = linkertscore.length;
 
-    res.render('index', {
+    return res.render('index', {
       title: 'Mathec | Dashboard',
       page_name: 'dashboard',
       admin: req.session.admin,
@@ -29,6 +47,7 @@ router.get('/', async (req, res) => {
         users: usersCount,
         kuisioners: (userFilled / usersCount) * 100,
       },
+      notifications: notifications,
     });
   } catch (error) {
     console.error(error);

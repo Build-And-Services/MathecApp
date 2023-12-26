@@ -87,6 +87,19 @@ class AuthenticationController {
         const getAvatarRandom = avatars[randomIndex];
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.findOne({
+          where: {
+            email: email,
+          },
+          paranoid: false,
+        });
+        if (user) {
+          return res.status(403).json({
+            code: 403,
+            succcess: false,
+            message: 'this email is forbiden',
+          });
+        }
         const createProfile = await Profile.create({
           profile_picture: `src/avatarprofiles/${getAvatarRandom}`,
         });

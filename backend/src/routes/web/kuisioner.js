@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const verify = require('./../../middleware/verify');
-const { User, Questioner, CategoryQuestioner, LinkertScore, Profile } = require('@models');
+const {
+  User,
+  Questioner,
+  CategoryQuestioner,
+  LinkertScore,
+  Profile,
+  Report,
+} = require('@models');
 const puppeteer = require('puppeteer');
 const ejs = require('ejs');
 
@@ -60,8 +67,8 @@ router.get('/', async (req, res) => {
       }),
     ]);
 
-    const transformedData = users.map(d => {
-      const total_score = d.linkertScore.map(d => d.score);
+    const transformedData = users.map((d) => {
+      const total_score = d.linkertScore.map((d) => d.score);
       const user = total_score.length;
       const score = total_score.reduce((previous, current) => {
         const sum = previous + current;
@@ -108,12 +115,31 @@ router.get('/:id', async (req, res) => {
         Profile,
       ],
     });
+    const notifications = await Report.findAll({
+      where: {
+        read: false,
+      },
+      include: [
+        {
+          model: User,
+          as: 'pelapor',
+          paranoid: false,
+          include: [
+            {
+              model: Profile,
+              as: 'Profile',
+            },
+          ],
+        },
+      ],
+    });
 
     return res.render('detail_kuisioner', {
       title: 'Mathec | ' + user.name,
       page_name: 'kuisioner',
       admin: req.session.admin,
       user,
+      notifications,
     });
   } catch (error) {
     return res.render('error', {
@@ -139,7 +165,9 @@ router.get('/:id/print', async (req, res) => {
         Profile,
       ],
     });
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: 'new',
+    });
     const page = await browser.newPage();
     const html = await ejs.renderFile('views/pdf/template.ejs', {
       admin: req.session.admin,

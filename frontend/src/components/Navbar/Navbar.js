@@ -30,12 +30,10 @@ const Navbar = () => {
     getInfoLogin();
   }, [getInfoLogin, isLogin, navigate]);
 
-  const handleSearch = async (keyword) => {
+  const handleSearch = async keyword => {
     if (keyword !== '') {
       setLoading(true);
-      const response = await fetch(
-        process.env.REACT_APP_API_HOST + '/api/home/search/' + keyword
-      );
+      const response = await fetch(process.env.REACT_APP_API_HOST + '/api/home/search/' + keyword);
       const result = await response.json();
       setResult({
         questions: result.questions,
@@ -46,20 +44,17 @@ const Navbar = () => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     handleSearch(e.target.value);
   };
 
-  const handleFocus = (e) => {
+  const handleFocus = e => {
     const box = document.querySelector('#box-search');
     box.classList.toggle('focus');
   };
 
   return (
-    <nav
-      className='navbar navbar-expand-lg '
-      style={{ backgroundColor: '#fff' }}
-    >
+    <nav className='navbar navbar-expand-lg ' style={{ backgroundColor: '#fff' }}>
       <div className='container-fluid d-flex'>
         <a className='navbar-brand' href='/'>
           <img className='free-sample-by-wix logo-left' alt='' src={logo} />
@@ -68,14 +63,7 @@ const Navbar = () => {
         <div className='container-search'>
           <div className='navbar'>
             <div className='search'>
-              <input
-                id='search-input'
-                onFocus={handleFocus}
-                className='search-input px-4'
-                placeholder='Search'
-                type='text'
-                onChange={handleChange}
-              />
+              <input id='search-input' onFocus={handleFocus} className='search-input px-4' placeholder='Search' type='text' onChange={handleChange} />
             </div>
             <div id='box-search' className='box-search'>
               {loading ? (
@@ -88,10 +76,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <QuestionResult
-                    questions={result.questions}
-                    close={handleFocus}
-                  />
+                  <QuestionResult questions={result.questions} close={handleFocus} />
                   <UsersResult users={result.users} close={handleFocus} />
                   <TagResult tags={result.tags} close={handleFocus} />
                 </>
@@ -122,11 +107,7 @@ const Navbar = () => {
           >
             <img
               className='profile'
-              src={
-                dataLogin.profile_picture && dataLogin.profile_picture
-                  ? `${process.env.REACT_APP_API_HOST}/` + dataLogin.profile_picture
-                  : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'
-              }
+              src={dataLogin.profile_picture && dataLogin.profile_picture ? `${process.env.REACT_APP_API_HOST}/` + dataLogin.profile_picture : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'}
               alt=''
               style={{
                 marginRight: '20px',
@@ -145,14 +126,11 @@ const Navbar = () => {
                 aria-controls='navbarSupportedContent'
                 aria-expanded='false'
                 aria-label='Toggle navigation'
-                onClick={() => setToggle((prevState) => !prevState)}
+                onClick={() => setToggle(prevState => !prevState)}
               >
                 <span className='navbar-toggler-icon'></span>
               </button>
-              <div
-                className='bg-white border z-3 hidden-lg'
-                style={!toggle ? dropDownHide : dropDown}
-              >
+              <div className='bg-white border z-3 hidden-lg' style={!toggle ? dropDownHide : dropDown}>
                 <ul
                   className=''
                   style={{
@@ -170,7 +148,7 @@ const Navbar = () => {
                         textDecoration: 'none',
                         color: 'black',
                       }}
-                      onClick={() => setToggle((prevState) => !prevState)}
+                      onClick={() => setToggle(prevState => !prevState)}
                     >
                       Questions
                     </Link>
@@ -182,7 +160,7 @@ const Navbar = () => {
                         textDecoration: 'none',
                         color: 'black',
                       }}
-                      onClick={() => setToggle((prevState) => !prevState)}
+                      onClick={() => setToggle(prevState => !prevState)}
                     >
                       Users
                     </Link>
@@ -194,7 +172,7 @@ const Navbar = () => {
                         textDecoration: 'none',
                         color: 'black',
                       }}
-                      onClick={() => setToggle((prevState) => !prevState)}
+                      onClick={() => setToggle(prevState => !prevState)}
                     >
                       Tag
                     </Link>
@@ -206,7 +184,7 @@ const Navbar = () => {
                         textDecoration: 'none',
                         color: 'black',
                       }}
-                      onClick={() => setToggle((prevState) => !prevState)}
+                      onClick={() => setToggle(prevState => !prevState)}
                     >
                       Saved
                     </Link>
@@ -222,21 +200,16 @@ const Navbar = () => {
                   cursor: 'pointer',
                   alignItems: 'center',
                 }}
-                onClick={() => setToggle((prevState) => !prevState)}
+                onClick={() => setToggle(prevState => !prevState)}
               >
                 {/* <div className='dropdown'> */}
-                <div className='dropdown nav-link'>
-                  {dataLogin.name ? dataLogin.name : ''}
-                </div>
+                <div className='dropdown nav-link'>{dataLogin.name ? dataLogin.name : ''}</div>
                 {/* </div> */}
 
                 <HiChevronDown size={30} />
               </div>
 
-              <div
-                className='bg-white border z-3'
-                style={!toggle ? dropDownHide : dropDown}
-              >
+              <div className='bg-white border z-3' style={!toggle ? dropDownHide : dropDown}>
                 <ul
                   className=''
                   style={{
@@ -254,7 +227,7 @@ const Navbar = () => {
                         textDecoration: 'none',
                         color: 'black',
                       }}
-                      onClick={() => setToggle((prevState) => !prevState)}
+                      onClick={() => setToggle(prevState => !prevState)}
                     >
                       Profile
                     </Link>
@@ -277,10 +250,7 @@ const Navbar = () => {
           </div>
         ) : (
           <div style={{}}>
-            <button
-              className='btn btn-primary'
-              onClick={() => navigate('/auth')}
-            >
+            <button className='btn btn-primary' onClick={() => navigate('/auth')}>
               Login
             </button>
           </div>

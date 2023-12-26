@@ -39,7 +39,8 @@ class AuthenticationController {
           {
             user_id: data.id,
           },
-          process.env.JWT_SECRET
+          process.env.JWT_SECRET,
+          { expiresIn: 86400 }
         );
 
         return res.status(200).json({

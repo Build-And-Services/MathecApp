@@ -33,5 +33,12 @@ app.use('/api/reports', report);
 
 // Questions route
 app.use('/api/questions', questions);
+app.use('/api/*', (req, res) => {
+  return res.json({
+    code: 404,
+    success: false,
+    message: 'The route is not found',
+  });
+});
 
 module.exports = app;

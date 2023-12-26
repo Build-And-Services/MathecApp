@@ -1,0 +1,31 @@
+POST http://localhost:3000/api/auth
+Content-Type: application/json
+
+{
+  "email": "perdana@mail.com",
+  "password": "perdana@mail.com"
+}
+
+###
+GET http://localhost:3000/api/home/hot
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMiIsImlhdCI6MTcwMzU4ODI5MiwiZXhwIjoxNzAzNTg4MzAyfQ.Xv2yKSfH3_T4iIOhyeC1Z9nXGrfPmwFG2YMUWZuFTYk
+
+###
+GET http://localhost:3000/api/users/userinfo/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMiIsImlhdCI6MTcwMzU4Nzk4NCwiZXhwIjoxNzAzNjc0Mzg0fQ.B9Bx1m2vBX71zxnZUavJF0DeZmnemrX0R14ZsH3fIPs
+
+###
+GET http://localhost:3000/api/save/3/long
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMiIsImlhdCI6MTcwMzU4Nzk4NCwiZXhwIjoxNzAzNjc0Mzg0fQ.B9Bx1m2vBX71zxnZUavJF0DeZmnemrX0R14ZsH3fIPs
+
+###
+GET http://localhost:3000/api/questioner
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMiIsImlhdCI6MTcwMzU4Nzk4NCwiZXhwIjoxNzAzNjc0Mzg0fQ.B9Bx1m2vBX71zxnZUavJF0DeZmnemrX0R14ZsH3fIPs
+
+###
+GET http://localhost:3000/api/questions/answer/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMiIsImlhdCI6MTcwMzU4Nzk4NCwiZXhwIjoxNzAzNjc0Mzg0fQ.B9Bx1m2vBX71zxnZUavJF0DeZmnemrX0R14ZsH3fIPs
+
+# TESTING FOR ROUTE NOT FOUND
+###
+GET http://localhost:3000/api/hahaha

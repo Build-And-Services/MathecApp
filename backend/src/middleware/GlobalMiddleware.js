@@ -35,6 +35,7 @@ class GlobalMiddleware {
       // Menyimpan data pengguna yang terverifikasi ke objek request
       req.user = decoded;
 
+      console.log(req.user);
       // Lanjutkan ke middleware atau penanganan rute berikutnya
       next();
     } catch (err) {

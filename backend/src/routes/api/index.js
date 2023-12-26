@@ -11,19 +11,13 @@ const users = require('./users');
 const save = require('./save');
 const questioner = require('./questioner');
 const report = require('./report');
-const GlobalMiddleware = require('../../middleware/GlobalMiddleware');
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-// Auth route
 app.use('/api/auth', auth);
-// Tag route
-// Middleware global, why "/auth" not use this middleware because it not requires middleware
-app.use(GlobalMiddleware.check);
-// Home route
 app.use('/api/home', home);
 app.use('/api/tag', tag);
 app.use('/api/users', users);

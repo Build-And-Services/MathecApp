@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const QuestionController = require('@controllers/QuestionController');
+const GlobalMiddleware = require('../../../middleware/GlobalMiddleware');
 
-router.post('/', QuestionController.addQuestionByUserId);
+router.post(
+  '/',
+  GlobalMiddleware.check,
+  QuestionController.addQuestionByUserId
+);
 router.put('/:id', QuestionController.updateQuestionById);
 router.post('/like', QuestionController.likeQuestionById);
 router.post('/dislike', QuestionController.disLikeQuestionById);

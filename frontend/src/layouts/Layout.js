@@ -13,19 +13,7 @@ export default function Layout({ children }) {
   const { isLogin, checkLogin } = useAuthStore();
 
   useEffect(() => {
-    if (!checkLogin()) {
-      // if (!isLogin) {
-      //   if (!['/auth'].includes(location.pathname)) {
-      //     if (!location.pathname.includes('/detailquestion')) {
-      //       window.location.replace('/auth');
-      //     }
-      //   }
-      // } else {
-      //   if (['/auth'].includes(location.pathname)) {
-      //     navigate('/');
-      //   }
-      // }
-    } else {
+    if (checkLogin()) {
       if (['/auth'].includes(location.pathname)) {
         navigate('/');
       }
@@ -47,7 +35,11 @@ export default function Layout({ children }) {
     );
   }
 
-  if (['/auth'].includes(location.pathname) || location.pathname.includes('/forgot-password') || location.pathname.includes('/kuesioner')) {
+  if (
+    ['/auth'].includes(location.pathname) ||
+    location.pathname.includes('/forgot-password') ||
+    location.pathname.includes('/kuesioner')
+  ) {
     return (
       <>
         <main>{children}</main>
@@ -63,25 +55,46 @@ export default function Layout({ children }) {
             height: '100%',
           }}
         >
-          <div className='row' style={{ position: 'sticky', top: '0px', zIndex: 20 }}>
+          <div
+            className='row'
+            style={{ position: 'sticky', top: '0px', zIndex: 20 }}
+          >
             <Navbar />
           </div>
           <div className='row mt-4 justify-content-center'>
             {location.pathname !== '/addquestion' && (
-              <div className='col-md-2 col-md-1  md:hidden' style={{ position: 'sticky', top: '140px' }}>
+              <div
+                className='col-md-2 col-md-1  md:hidden'
+                style={{ position: 'sticky', top: '140px' }}
+              >
                 <Sidebar />
               </div>
             )}
-            {['/addquestion', '/profile', '/editprofile'].includes(location.pathname) || location.pathname.includes('/userinfo') ? <main className='col-md-10'>{children}</main> : <main className='col-md-8'>{children}</main>}
-
-            {!['/addquestion', '/profile', '/editprofile'].includes(location.pathname) && !location.pathname.includes('/userinfo') && (
-              <div className='col-lg-2 col-md-4 md:hidden' style={{ position: 'sticky', top: '140px' }}>
-                <SidebarRight />
-              </div>
+            {['/addquestion', '/profile', '/editprofile'].includes(
+              location.pathname
+            ) || location.pathname.includes('/userinfo') ? (
+              <main className='col-md-10'>{children}</main>
+            ) : (
+              <main className='col-md-8'>{children}</main>
             )}
+
+            {!['/addquestion', '/profile', '/editprofile'].includes(
+              location.pathname
+            ) &&
+              !location.pathname.includes('/userinfo') && (
+                <div
+                  className='col-lg-2 col-md-4 md:hidden'
+                  style={{ position: 'sticky', top: '140px' }}
+                >
+                  <SidebarRight />
+                </div>
+              )}
           </div>
         </div>
-        <footer className='px-5 d-flex justify-content-center text-center w-100' style={{ backgroundColor: '#fff', paddingTop: '.8em' }}>
+        <footer
+          className='px-5 d-flex justify-content-center text-center w-100'
+          style={{ backgroundColor: '#fff', paddingTop: '.8em' }}
+        >
           <div
             style={{
               width: '600px',
@@ -96,7 +109,8 @@ export default function Layout({ children }) {
               <br />
               Universitas Nahdlatul Ulama Al Ghazali Cilacap
               <br />
-              Jl. Kemerdekaan Barat No.17, Kesugihan Kidul, Kec.Kesugihan, Kabupaten Cilacap, Jawa Tengah
+              Jl. Kemerdekaan Barat No.17, Kesugihan Kidul, Kec.Kesugihan,
+              Kabupaten Cilacap, Jawa Tengah
             </span>
             <br />
             <div

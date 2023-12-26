@@ -13,6 +13,14 @@ export default function Layout({ children }) {
   const { isLogin, checkLogin } = useAuthStore();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      checkLogin();
+    }, 11000);
+
+    return () => clearInterval(interval);
+  });
+
+  useEffect(() => {
     if (checkLogin()) {
       if (['/auth'].includes(location.pathname)) {
         navigate('/');

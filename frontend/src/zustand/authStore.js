@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const useAuthStore = create(set => ({
+const useAuthStore = create((set) => ({
   dataLogin: {},
   isLogin: false,
   logout: () => {
@@ -12,36 +12,26 @@ const useAuthStore = create(set => ({
   },
   checkLogin: () => {
     let user = JSON.parse(localStorage.getItem('user'));
-    let tokenExpiration = JSON.parse(localStorage.getItem('expiredToken'));
-    if (tokenExpiration == null) {
-      user = localStorage.removeItem('user');
-      set({
-        isLogin: false,
-      });
-    }
-    const sekarang = Math.floor(Date.now() / 1000);
-    const validToken = sekarang < tokenExpiration;
-    if (!validToken) {
-      user = localStorage.removeItem('user');
-      tokenExpiration = localStorage.removeItem('expiredToken');
-      set({
-        isLogin: false,
-      });
-    } else {
-      set({
-        isLogin: true,
-      });
-      return user;
-    }
     if (user == null) {
       set({
         isLogin: false,
       });
+      return null;
     } else {
-      set({
-        isLogin: true,
-      });
-      return user;
+      let exp = user.data.exp;
+      const expired = exp < Math.floor(Date.now() / 1000);
+      if (expired) {
+        localStorage.removeItem('user');
+        set({
+          isLogin: false,
+          dataLogin: {},
+        });
+      } else {
+        set({
+          isLogin: true,
+        });
+        return user;
+      }
     }
   },
   getInfoLogin: () => {
@@ -49,6 +39,11 @@ const useAuthStore = create(set => ({
     if (user) {
       set({
         dataLogin: user.data,
+      });
+    } else {
+      set({
+        isLogin: false,
+        dataLogin: {},
       });
     }
   },

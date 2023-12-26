@@ -40,8 +40,10 @@ class AuthenticationController {
             user_id: data.id,
           },
           process.env.JWT_SECRET,
-          { expiresIn: '10s' }
+          { expiresIn: '1d' }
         );
+
+        const decode = jwt.decode(token);
 
         return res.status(200).json({
           code: 200,
@@ -53,6 +55,7 @@ class AuthenticationController {
             email: data.email,
             profile_picture: data.Profile.profile_picture,
             token: token,
+            exp: decode.exp,
           },
         });
       } catch (err) {

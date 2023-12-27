@@ -1,14 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verify = require('./../../middleware/verify');
-const {
-  User,
-  Questioner,
-  CategoryQuestioner,
-  LinkertScore,
-  Profile,
-  Report,
-} = require('@models');
+const { User, Questioner, CategoryQuestioner, LinkertScore, Profile, Report } = require('@models');
 const puppeteer = require('puppeteer');
 const ejs = require('ejs');
 
@@ -36,6 +29,7 @@ router.get('/', async (req, res) => {
         },
       ],
     });
+
     const [notifications, users] = await Promise.all([
       Report.findAll({
         where: {
@@ -67,8 +61,8 @@ router.get('/', async (req, res) => {
       }),
     ]);
 
-    const transformedData = users.map((d) => {
-      const total_score = d.linkertScore.map((d) => d.score);
+    const transformedData = users.map(d => {
+      const total_score = d.linkertScore.map(d => d.score);
       const user = total_score.length;
       const score = total_score.reduce((previous, current) => {
         const sum = previous + current;
@@ -111,6 +105,13 @@ router.get('/:id', async (req, res) => {
         {
           model: Questioner,
           as: 'questioner',
+          include: [
+            {
+              model: CategoryQuestioner,
+              as: 'category',
+              attributes: ['name'],
+            },
+          ],
         },
         Profile,
       ],
@@ -161,6 +162,13 @@ router.get('/:id/print', async (req, res) => {
         {
           model: Questioner,
           as: 'questioner',
+          include: [
+            {
+              model: CategoryQuestioner,
+              as: 'category',
+              attributes: ['name'],
+            },
+          ],
         },
         Profile,
       ],

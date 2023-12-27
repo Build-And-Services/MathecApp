@@ -74,7 +74,7 @@
                               <%= report.pelapor.name %>
                             </td>
                             <td>
-                              <%= report.bukti_laporan %>
+                              <a href="http://localhost:3000<%= report.bukti_laporan %>"><img src="http://localhost:3000<%= report.bukti_laporan %>" alt="" width="50px"></a>
                             </td>
                             <td>
                             <% if(report.terlapor.deleted_at == null) { %>
@@ -123,7 +123,7 @@
                                     <p>
                                       <%= report.deskripsi %>
                                     </p>
-                                    ....bukti....
+                                    <a href="http://localhost:3000<%= report.bukti_laporan %>"><img src="http://localhost:3000<%= report.bukti_laporan %>" alt="" width="90px"></a>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

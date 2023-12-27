@@ -30,7 +30,7 @@
                     <div class="card-header">
                       <div class="row">
                        <div class="col-md-3">
-                        <img src="/src/avatarprofiles/avatar1.jpg" 
+                        <img src="http://localhost:3000/<%= user.Profile.profile_picture%>" 
                         class="rounded img-responsive" 
                         alt="profile"
                         width="200px"/>
@@ -75,7 +75,7 @@
                               <tr>
                                 <td><%= no++; %></td>
                                 <td><%= questioner.questioner %></td>
-                                <td><%= questioner.category %></td>
+                                <td><%= questioner.category.name %></td>
                                 <td><%= questioner.LinkertScore.score %></td>
                               </tr>
                               <% total += questioner.LinkertScore.score %>

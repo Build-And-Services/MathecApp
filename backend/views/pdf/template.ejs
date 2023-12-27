@@ -1,323 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kuisioner</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kuisioner</title>
+    <style>
 
-  <style>
-    html {
-      box-sizing: border-box;
-    }
-
-    *,
-    *:before,
-    *:after {
-      box-sizing: inherit;
-    }
-
-    body {
-      color: rgba(0, 0, 0, .87);
-    }
-
-    a {
-      color: rgba(38, 137, 13, 1);
-    }
-
-    a:hover,
-    a:focus {
-      color: rgba(4, 106, 56, 1);
-    }
-
-    .container {
-      margin: 5% 3%;
-    }
-
-    @media (min-width: 48em) {
-      .container {
-        margin: 2%;
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+      :root {
+        --font-color: black;
+        --highlight-color: #60d0e4;
+        --header-bg-color: #b8e6f1;
+        --footer-bg-color: #bfc0c3;
+        --table-row-separator-color: #bfc0c3;
       }
-    }
 
-    @media (min-width: 75em) {
-      .container {
-        margin: 2em auto;
-        max-width: 75em;
+      body {
+        margin: 0;
+        padding: 1rem 2rem;
+        color: var(--font-color);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10pt;
       }
-    }
 
-    .responsive-table {
-      width: 100%;
-      margin-bottom: 1.5em;
-      border-spacing: 0;
-    }
 
-    @media (min-width: 48em) {
-      .responsive-table {
-        font-size: 0.9em;
+      a {
+        color: inherit;
+        text-decoration: none;
       }
-    }
 
-    @media (min-width: 62em) {
-      .responsive-table {
-        font-size: 1em;
+      header {
+        height: 5cm;
+        padding: 1cm 1cm;
+        margin: 0;
+        background-color: var(--header-bg-color);
+        margin-bottom: 2rem;
       }
-    }
 
-    .responsive-table thead {
-      position: absolute;
-      clip: rect(1px 1px 1px 1px);
-      /* IE6, IE7 */
-      padding: 0;
-      border: 0;
-      height: 1px;
-      width: 1px;
-      overflow: hidden;
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table thead {
-        position: relative;
-        clip: auto;
-        height: auto;
-        width: auto;
-        overflow: auto;
+      header .headerSection {
+        display: flex;
+        justify-content: space-between;
       }
-    }
 
-    .responsive-table thead th {
-      background-color: rgba(38, 137, 13, 1);
-      border: 1px solid rgba(134, 188, 37, 1);
-      font-weight: normal;
-      text-align: center;
-      color: white;
-    }
-
-    .responsive-table thead th:first-of-type {
-      text-align: left;
-    }
-
-    .responsive-table tbody,
-    .responsive-table tr,
-    .responsive-table th,
-    .responsive-table td {
-      display: block;
-      padding: 0;
-      text-align: left;
-      white-space: normal;
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table tr {
-        display: table-row;
+      header .logoAndName {
+        display: flex;
+        gap: 1rem;
+        align-items: start;
+        justify-content: space-between;
       }
-    }
 
-    .responsive-table th,
-    .responsive-table td {
-      padding: 0.5em;
-      vertical-align: middle;
-    }
 
-    @media (min-width: 30em) {
-
-      .responsive-table th,
-      .responsive-table td {
-        padding: 0.75em 0.5em;
+      header h1,
+      header h2,
+      header h3,
+      header p {
+        margin: 0;
       }
-    }
 
-    @media (min-width: 48em) {
-
-      .responsive-table th,
-      .responsive-table td {
-        display: table-cell;
-        padding: 0.5em;
+      header h2,
+      header h3 {
+        text-transform: uppercase;
       }
-    }
 
-    @media (min-width: 62em) {
-
-      .responsive-table th,
-      .responsive-table td {
-        padding: 0.75em 0.5em;
+      header hr {
+        margin: 1cm 0 0.5cm 0;
       }
-    }
 
-    @media (min-width: 75em) {
-
-      .responsive-table th,
-      .responsive-table td {
-        padding: 0.75em;
+      main table {
+        width: 100%;
+        border-collapse: collapse;
       }
-    }
 
-    .responsive-table caption {
-      margin-bottom: 1em;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-    }
+      main table thead { display:table-row-group }
 
-    @media (min-width: 48em) {
-      .responsive-table caption {
-        font-size: 1.5em;
+
+      main table thead th {
+        height: 1cm;
+        color: black;
+        background-color: var(--highlight-color);
+        padding: .5rem .5rem;
       }
-    }
 
-    .responsive-table tfoot {
-      font-size: 0.8em;
-      font-style: italic;
-    }
 
-    @media (min-width: 62em) {
-      .responsive-table tfoot {
-        font-size: 0.9em;
+      main table tbody td {
+        padding: 1rem .5rem;
+        border-bottom: 0.5mm solid var(--table-row-separator-color);
       }
-    }
 
-    @media (min-width: 48em) {
-      .responsive-table tbody {
-        display: table-row-group;
+      main table thead th:last-of-type,
+      main table tbody td:last-of-type {
+        text-align: right;
       }
-    }
 
-    .responsive-table tbody tr {
-      margin-bottom: 1em;
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table tbody tr {
-        display: table-row;
-        border-width: 1px;
-      }
-    }
-
-    .responsive-table tbody tr:last-of-type {
-      margin-bottom: 0;
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table tbody tr:nth-of-type(even) {
-        background-color: rgba(0, 0, 0, .12);
-      }
-    }
-
-    .responsive-table tbody th[scope="row"] {
-      background-color: rgba(38, 137, 13, 1);
-      color: white;
-    }
-
-    @media (min-width: 30em) {
-      .responsive-table tbody th[scope="row"] {
-        border-left: 1px solid rgba(134, 188, 37, 1);
-        border-bottom: 1px solid rgba(134, 188, 37, 1);
-      }
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table tbody th[scope="row"] {
-        background-color: transparent;
-        color: rgba(0, 0, 1, );
+      main table th {
         text-align: left;
       }
-    }
+    </style>
+  </head>
 
-    .responsive-table tbody td {
-      text-align: right;
-    }
+  <body>
+<header>
+  <div class="headerSection">
+    <div class="logoAndName">
+      <div class="">
+        <img src="http://localhost:3000/<%= user.Profile.profile_picture %>" 
+        class="rounded img-responsive" 
+        alt="profile"
+        width="150px"/>
+      </div>
+      <div class="">
+        <h2><%= user.name %></h2>
+        <% if(user.questioner.length > 0) { %>
+          <p class="text-muted mb-0" style="font-size: 12px; margin-bottom: 12px; margin-top: 6px;">mengisi data kuisioner pada tanggal <%= new Date(user.questioner[0].createdAt).toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "short",
 
-    @media (min-width: 48em) {
-      .responsive-table tbody td {
-        border-left: 1px solid rgba(134, 188, 37, 1);
-        border-bottom: 1px solid rgba(134, 188, 37, 1);
-        text-align: center;
-      }
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table tbody td:last-of-type {
-        border-right: 1px solid rgba(134, 188, 37, 1);
-      }
-    }
-
-    .responsive-table tbody td[data-type=currency] {
-      text-align: right;
-    }
-
-    .responsive-table tbody td[data-title]:before {
-      content: attr(data-title);
-      float: left;
-      font-size: 0.8em;
-      color: rgba(0, 0, 0, .54);
-    }
-
-    @media (min-width: 30em) {
-      .responsive-table tbody td[data-title]:before {
-        font-size: 0.9em;
-      }
-    }
-
-    @media (min-width: 48em) {
-      .responsive-table tbody td[data-title]:before {
-        content: none;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <table class="responsive-table">
-      <caption>Data Question <%= user.name %> </caption>
-      <thead>
-        <tr>
-          <td>No.</td>
-          <td>Questioner</td>
-          <td>Category</td>
-          <td>Score</td>
-        </tr>
-      </thead>
-      <tbody>
-        <% let nomer=1; %>
-          <% let total=0; %>
-            <% user.questioner.forEach((questioner)=> { %>
-              <tr>
-                <td>
-                  <%= nomer++; %>
-                </td>
-                <th scope="row">
-                  <%= questioner.questioner %>
-                </th>
-                <td>
-                  <%= questioner.category %>
-                </td>
-                <td>
-                  <%= questioner.LinkertScore.score %>
-                </td>
-              </tr>
-              <% total +=questioner.LinkertScore.score %>
-            <%})%>
-          <!-- <th scope="row">Zootopia</th>
-          <td data-title="Released">2016</td>
-          <td data-title="Studio">Disney</td>
-          <td data-title="Worldwide Gross" data-type="currency">$1,023,792,558</td>
-          <td data-title="Domestic Gross" data-type="currency">$341,268,248</td>
-          <td data-title="International Gross" data-type="currency">$682,524,310</td>
-          <td data-title="Budget" data-type="currency">$150,000,000</td> -->
-        <!-- </tr> -->
-      </tbody>
-      <tfood>
-        <tr>
-          <td colspan="3">Total</td>
-          <td>
-            <%= total %>
-          </td>
-        </tr>
-        </tfoot>
-    </table>
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: false,
+          }) %></p>
+        <% } else { %> 
+          <p>Belum pernah mengisi kuisioner</p>
+        <%}%>
+        <p class="text-black">
+          <% if(!user.deskripsi) {%>
+            Tidak ada deskripsi yang dapat ditampilkan disini.
+          <% } else { %>
+            <%= user.deskripsi %>
+          <% } %>
+        </p>
+       </div>
+    </div>
   </div>
-</body>
+</header>
+<main>
+  <table>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Questioner</th>
+        <th>Category</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% let no=1; %>
+        <% let total=0; %>
+          <% user.questioner.forEach((questioner)=> { %>
+            <tr>
+              <td>
+                <%= no++; %>
+              </td>
+              <td>
+                <%= questioner.questioner %>
+              </td>
+              <td>
+                <%= questioner.category.name %>
+              </td>
+              <td>
+                <%= questioner.LinkertScore.score %>
+              </td>
+            </tr>
+            <% total +=questioner.LinkertScore.score %>
+          <%})%>
+    </tbody>
+    <tfood>
+      <tr>
+        <td colspan="3">Total</td>
+        <td>
+          <%= total %>
+        </td>
+      </tr>
+      </tfood>
+  </table>
+</main>
+  </body>
 </html>

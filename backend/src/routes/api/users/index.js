@@ -46,7 +46,7 @@ router.put(
     upload(req, res, function (err) {
       if (err) {
         return res.status(400).json({
-          error: err.message,
+          error: err,
         });
       }
       next();
@@ -78,8 +78,7 @@ router.post('/forgot-password', (req, res) => {
   });
 
   res.status(201).json({
-    message:
-      'Email reset password telah dikirim. Silakan periksa kotak masuk Anda.',
+    message: 'Email reset password telah dikirim. Silakan periksa kotak masuk Anda.',
   });
 });
 module.exports = router;

@@ -8,14 +8,9 @@ const ejs = require('ejs');
 
 app.set('view engine', 'ejs');
 app.use('/src/image', express.static(path.join(__dirname, 'src', 'image')));
-app.use(
-  '/public/assets',
-  express.static(path.join(__dirname, 'public', 'assets'))
-);
-app.use(
-  '/src/avatarprofiles',
-  express.static(path.join(__dirname, 'src', 'avatarprofiles'))
-);
+app.use('/public/assets', express.static(path.join(__dirname, 'public', 'assets')));
+app.use('/src/buktireport', express.static(path.join(__dirname, 'src', 'image', 'buktireport')));
+app.use('/src/avatarprofiles', express.static(path.join(__dirname, 'src', 'avatarprofiles')));
 
 app.use(routes);
 app.use(web);

@@ -75,14 +75,7 @@ class AuthenticationController {
     } else {
       try {
         const { email, name, password } = req.body;
-        const avatars = [
-          'avatar1.jpg',
-          'avatar2.jpg',
-          'avatar3.jpg',
-          'avatar4.jpg',
-          'avatar5.jpg',
-          'avatar6.jpg',
-        ];
+        const avatars = ['avatar1.jpg', 'avatar2.jpg', 'avatar3.jpg', 'avatar4.jpg', 'avatar5.jpg', 'avatar6.jpg'];
         const randomIndex = Math.floor(Math.random() * avatars.length);
         const getAvatarRandom = avatars[randomIndex];
 

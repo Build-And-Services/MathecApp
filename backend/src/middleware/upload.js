@@ -17,6 +17,20 @@ const storage = multer.diskStorage({
   },
 });
 
+const storageBukti = multer.diskStorage({
+  destination: function (req, file, cb) {
+    let dir = 'src/image/buktireport';
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const ext = file.originalname.split('.');
+    cb(null, Date.now() + '.' + ext[ext.length - 1]);
+  },
+});
+
 const upload = multer({
   storage: storage,
   limits: { fileSize: 5000000 },
@@ -25,7 +39,20 @@ const upload = multer({
 
     const fileSize = parseInt(req.headers['content-length']);
     if (fileSize > 5000000) {
-      return cb(new Error('File tidak boleh lebih dari 3mb'));
+      return cb('File tidak boleh lebih dari 3mb');
+    }
+  },
+}).single('file');
+
+const uploadBukti = multer({
+  storage: storageBukti,
+  limits: { fileSize: 5000000 },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+
+    const fileSize = parseInt(req.headers['content-length']);
+    if (fileSize > 5000000) {
+      return cb('File tidak boleh lebih dari 3mb');
     }
   },
 }).single('file');
@@ -42,8 +69,8 @@ function checkFileType(file, cb) {
   if (mimeType && extName) {
     return cb(null, true);
   } else {
-    cb('Error: Images Only !!!');
+    return cb('Error: Images Only !!!');
   }
 }
 
-module.exports = { upload };
+module.exports = { upload, uploadBukti };

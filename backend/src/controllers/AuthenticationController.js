@@ -18,15 +18,22 @@ class AuthenticationController {
         const data = await User.findOne({
           where: { email: email },
           include: [Profile],
+          paranoid: false,
         });
-
         if (!data) {
-          return res.status(400).json({
-            code: 400,
+          return res.status(404).json({
+            code: 404,
             success: false,
             message: 'Email not found',
           });
         }
+        if (data.deleted_at != null) {
+          return res.status(403).json({
+            status: false,
+            message: 'Akun Ini ditangguhkan',
+          });
+        }
+
         const isPasswordValid = await bcrypt.compare(password, data.password);
         if (!isPasswordValid) {
           return res.status(400).json({

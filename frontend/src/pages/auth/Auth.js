@@ -16,6 +16,7 @@ export default function Auth() {
     password: '',
   });
   const [error, setError] = useState(false);
+  const [messageErr, setMessageErr] = useState('');
   const [success, setSuccess] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
@@ -24,14 +25,11 @@ export default function Auth() {
     if (registerForm.password !== registerForm.password1) {
       setPasswordMatch(false);
     } else {
-      const response = await fetch(
-        process.env.REACT_APP_API_HOST + '/api/auth/register',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password }),
-        }
-      );
+      const response = await fetch(process.env.REACT_APP_API_HOST + '/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
       const json = await response.json();
       if (json.succcess) {
         setSuccess(true);
@@ -49,24 +47,26 @@ export default function Auth() {
       body: JSON.stringify({ email, password }),
     });
     const json = await response.json();
+    console.log(json);
+    console.log(response.status);
     if (response.ok) {
       localStorage.setItem('user', JSON.stringify(json));
       navigate('/');
+    } else if (response.status === 403) {
+      // setError(true);
+      setMessageErr('Akun Anda Ditangguhkan');
     } else {
-      setError(true);
+      // setError(true);
+      setMessageErr('Email or password failed!');
     }
   };
 
-  const handleSubmitRegister = async (e) => {
+  const handleSubmitRegister = async e => {
     e.preventDefault();
-    await register(
-      registerForm.name,
-      registerForm.email,
-      registerForm.password
-    );
+    await register(registerForm.name, registerForm.email, registerForm.password);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     await login(loginForm.email, loginForm.password);
   };
@@ -89,8 +89,8 @@ export default function Auth() {
     setPasswordMatch(true);
   };
 
-  const handleInputRegister = (event) => {
-    setRegisterForm((prevState) => {
+  const handleInputRegister = event => {
+    setRegisterForm(prevState => {
       return {
         ...prevState,
         [event.target.name]: event.target.value,
@@ -98,8 +98,8 @@ export default function Auth() {
     });
   };
 
-  const handleInputLogin = (event) => {
-    setloginForm((prevState) => {
+  const handleInputLogin = event => {
+    setloginForm(prevState => {
       return {
         ...prevState,
         [event.target.name]: event.target.value,
@@ -115,44 +115,17 @@ export default function Auth() {
           <div className='form'>
             <div className='signIn'>
               <h2 className='mt-1'>Login</h2>
-              {error === true ? (
-                <div className='alert alert-danger'>
-                  Email or password failed!
-                </div>
-              ) : (
-                ''
-              )}
-              {success === true ? (
-                <div className='alert alert-success'>
-                  Succesfully registered. Please login first!
-                </div>
-              ) : (
-                ''
-              )}
+              {messageErr === 'Akun Anda Ditangguhkan' ? <div className='alert alert-danger'>{messageErr}</div> : messageErr === 'Email or password failed!' ? <div className='alert alert-danger'>Email or password failed!</div> : ''}
               <form onSubmit={handleSubmit}>
                 <div className='form-group mb-3'>
                   <label>Email</label>
-                  <input
-                    name='email'
-                    type='email'
-                    onChange={handleInputLogin}
-                    placeholder='Input your email'
-                    className='form-control'
-                  />
+                  <input name='email' type='email' onChange={handleInputLogin} placeholder='Input your email' className='form-control' />
                 </div>
                 <div className='form-group mb-3'>
                   <label>Password</label>
-                  <input
-                    name='password'
-                    type='password'
-                    onChange={handleInputLogin}
-                    placeholder='Input your password'
-                    className='form-control'
-                  />
+                  <input name='password' type='password' onChange={handleInputLogin} placeholder='Input your password' className='form-control' />
                 </div>
-                <button className='btn btn-success mt-3 mb-2 w-100'>
-                  Login
-                </button>
+                <button className='btn btn-success mt-3 mb-2 w-100'>Login</button>
                 <span>
                   Dont have an account?{' '}
                   <span
@@ -181,64 +154,29 @@ export default function Auth() {
               </form>
             </div>
             <div className='signUp'>
-              {error === true ? (
-                <div className='alert alert-danger'>Email is forbiden</div>
-              ) : (
-                ''
-              )}
+              {error === true ? <div className='alert alert-danger'>Email is forbiden</div> : ''}
 
-              {passwordMatch === false ? (
-                <div className='alert alert-danger'>Password faied!</div>
-              ) : (
-                ''
-              )}
+              {passwordMatch === false ? <div className='alert alert-danger'>Password faied!</div> : ''}
+              {error === true ? <div className='alert alert-danger'>This Email Is Forbiden</div> : ''}
               <h2>Register</h2>
               <form onSubmit={handleSubmitRegister}>
                 <div className='form-group mb-3'>
                   <label>Username</label>
-                  <input
-                    className='form-control'
-                    name='name'
-                    onChange={handleInputRegister}
-                    type='name'
-                    placeholder='Input your username'
-                  />
+                  <input className='form-control' name='name' onChange={handleInputRegister} type='name' placeholder='Input your username' />
                 </div>
                 <div className='form-group mb-3'>
                   <label>Email</label>
-                  <input
-                    className='form-control'
-                    name='email'
-                    onChange={handleInputRegister}
-                    type='email'
-                    placeholder='Input your email'
-                  />
+                  <input className='form-control' name='email' onChange={handleInputRegister} type='email' placeholder='Input your email' />
                 </div>
                 <div className='form-group mb-3'>
                   <label>Password</label>
-                  <input
-                    className='form-control'
-                    name='password'
-                    onChange={handleInputRegister}
-                    type='password'
-                    placeholder='Input your password'
-                    min={8}
-                  />
+                  <input className='form-control' name='password' onChange={handleInputRegister} type='password' placeholder='Input your password' min={8} />
                 </div>
                 <div className='form-group mb-3'>
                   <label>Confirm Password</label>
-                  <input
-                    className='form-control'
-                    name='password1'
-                    onChange={handleInputRegister}
-                    type='password'
-                    placeholder='Confirmation your password'
-                    min={8}
-                  />
+                  <input className='form-control' name='password1' onChange={handleInputRegister} type='password' placeholder='Confirmation your password' min={8} />
                 </div>
-                <button className='btn btn-success mt-3 mb-2 d-block w-100'>
-                  Register
-                </button>
+                <button className='btn btn-success mt-3 mb-2 d-block w-100'>Register</button>
                 <span className=''>
                   {' '}
                   Already have an account?{' '}
@@ -263,21 +201,13 @@ export default function Auth() {
               <center>
                 <img src={logoAuth} alt='' />
               </center>
-              <p className='text-center'>
-                Increase the quality and quantity of discussions with FMIKOM
-                UNUGHA CILACAP: Together we learn, develop, share in the fields
-                of Mathematics and Technology
-              </p>
+              <p className='text-center'>Increase the quality and quantity of discussions with FMIKOM UNUGHA CILACAP: Together we learn, develop, share in the fields of Mathematics and Technology</p>
             </div>
             <div className='overlay-right'>
               <center>
                 <img src={logoAuth} alt='' />
               </center>
-              <p className='text-center'>
-                Increase the quality and quantity of discussions with FMIKOM
-                UNUGHA CILACAP: Together we learn, develop, share in the fields
-                of Mathematics and Technology
-              </p>
+              <p className='text-center'>Increase the quality and quantity of discussions with FMIKOM UNUGHA CILACAP: Together we learn, develop, share in the fields of Mathematics and Technology</p>
             </div>
           </div>
         </div>

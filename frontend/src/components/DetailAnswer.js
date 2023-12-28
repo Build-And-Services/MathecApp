@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai';
 import useAnswerStore from '../zustand/answerStore';
 import { BsExclamationCircleFill } from 'react-icons/bs';
-import ReportModal from './Report';
+import ReportModal from './Report/index.jsx';
 
 const DetailAnswer = ({ answer, id, state }) => {
   const { likeAnswer, dislikeAnswer } = useAnswerStore();

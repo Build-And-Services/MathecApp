@@ -36,6 +36,8 @@ export default function Auth() {
       if (json.succcess) {
         setSuccess(true);
         handlePanel();
+      } else {
+        setError(true);
       }
     }
   };
@@ -72,6 +74,19 @@ export default function Auth() {
   const handlePanel = () => {
     const background = document.querySelector('.container-auth');
     background.classList.toggle('left-overlay-active');
+    setRegisterForm({
+      name: '',
+      email: '',
+      password: '',
+      password1: '',
+    });
+    setloginForm({
+      email: '',
+      password: '',
+    });
+    setSuccess(false);
+    setError(false);
+    setPasswordMatch(true);
   };
 
   const handleInputRegister = (event) => {
@@ -99,10 +114,6 @@ export default function Auth() {
         <div className='container-form'>
           <div className='form'>
             <div className='signIn'>
-              {/* <div>
-                <img src={logo} alt='' width={200} />
-              </div> */}
-
               <h2 className='mt-1'>Login</h2>
               {error === true ? (
                 <div className='alert alert-danger'>
@@ -170,14 +181,11 @@ export default function Auth() {
               </form>
             </div>
             <div className='signUp'>
-              {/* <center>
-                <img
-                  className='text-center'
-                  src={logo}
-                  alt='logo'
-                  width={200}
-                />
-              </center> */}
+              {error === true ? (
+                <div className='alert alert-danger'>Email is forbiden</div>
+              ) : (
+                ''
+              )}
 
               {passwordMatch === false ? (
                 <div className='alert alert-danger'>Password faied!</div>

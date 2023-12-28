@@ -17,35 +17,50 @@ const DetailAnswer = ({ answer, id, state }) => {
     answer_id: answer.id,
     pelapor_id: '',
   });
-  const handleSubmit = async e => {
+  const [file, setFile] = useState();
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setForm(prevstate => {
-      return { ...prevstate, pelapor_id: user.data.user_id };
-    });
+    const formData = new FormData();
+    for (const key in form) {
+      formData.append(key, form[key]);
+    }
+
+    if (file) {
+      formData.append('file', file);
+    }
     setLoading(true);
     await fetch(process.env.REACT_APP_API_HOST + '/api/reports', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${user.data.token}`,
       },
-      body: JSON.stringify({
-        ...form,
-      }),
+      body: formData,
     });
     setTimeout(() => {
       setLoading(false);
       handleClose();
     }, 500);
   };
+
   const handleClose = () => setShow(false);
+
   const handleShow = () => {
     if (user) {
+      setForm((prevstate) => {
+        return { ...prevstate, pelapor_id: user.data.user_id };
+      });
       setShow(true);
     } else {
       alert('Please Login First for report answer');
     }
   };
+
   return (
     <>
       <div className='card mb-4'>
@@ -60,7 +75,12 @@ const DetailAnswer = ({ answer, id, state }) => {
                   borderRadius: '50%',
                   objectFit: 'cover',
                 }}
-                src={answer.User.Profile.profile_picture === null ? 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png' : `${process.env.REACT_APP_API_HOST}/` + answer.User.Profile.profile_picture}
+                src={
+                  answer.User.Profile.profile_picture === null
+                    ? 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'
+                    : `${process.env.REACT_APP_API_HOST}/` +
+                      answer.User.Profile.profile_picture
+                }
                 alt=''
               />
               <div
@@ -145,15 +165,25 @@ const DetailAnswer = ({ answer, id, state }) => {
               </div>
               <div className='mt-4 text-start'>
                 {/* <p className="text-start">{parse(answer.body)}</p> */}
-                <div className='text-start' dangerouslySetInnerHTML={{ __html: answer.body }} />
+                <div
+                  className='text-start'
+                  dangerouslySetInnerHTML={{ __html: answer.body }}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Modal show={show} size='lg' aria-labelledby='contained-modal-title-vcenter' centered>
+      <Modal
+        show={show}
+        size='lg'
+        aria-labelledby='contained-modal-title-vcenter'
+        centered
+      >
         <Modal.Header closeButton onClick={handleClose}>
-          <Modal.Title id='contained-modal-title-vcenter'>Form Pelaporan</Modal.Title>
+          <Modal.Title id='contained-modal-title-vcenter'>
+            Form Pelaporan
+          </Modal.Title>
         </Modal.Header>
         <form onSubmit={handleSubmit}>
           <Modal.Body>
@@ -161,8 +191,8 @@ const DetailAnswer = ({ answer, id, state }) => {
               <Form.Label>Jenis Pelanggaran</Form.Label>
               <Form.Select
                 aria-label='Default select example'
-                onChange={e =>
-                  setForm(prevstate => {
+                onChange={(e) =>
+                  setForm((prevstate) => {
                     return { ...prevstate, jenis_laporan: e.target.value };
                   })
                 }
@@ -175,13 +205,16 @@ const DetailAnswer = ({ answer, id, state }) => {
                 <option value='bersifat provokatif'>Bersifat Provokatif</option>
               </Form.Select>
             </Form.Group>
-            <Form.Group className='mb-3' controlId='exampleForm.ControlTextarea1'>
+            <Form.Group
+              className='mb-3'
+              controlId='exampleForm.ControlTextarea1'
+            >
               <Form.Label>Deskripsi</Form.Label>
               <Form.Control
                 as='textarea'
                 rows={3}
-                onChange={e =>
-                  setForm(prevstate => {
+                onChange={(e) =>
+                  setForm((prevstate) => {
                     return { ...prevstate, deskripsi: e.target.value };
                   })
                 }
@@ -189,7 +222,7 @@ const DetailAnswer = ({ answer, id, state }) => {
             </Form.Group>
             <Form.Group className='mb-3'>
               <Form.Label>Bukti</Form.Label>
-              <Form.Control type='file' />
+              <Form.Control type='file' onChange={handleFileChange} />
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

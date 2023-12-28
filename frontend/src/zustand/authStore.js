@@ -19,6 +19,12 @@ const useAuthStore = create((set) => ({
       return null;
     } else {
       let exp = user.data.exp;
+      if (exp === undefined) {
+        set({
+          isLogin: false,
+        });
+        return;
+      }
       const expired = exp < Math.floor(Date.now() / 1000);
       if (expired) {
         localStorage.removeItem('user');

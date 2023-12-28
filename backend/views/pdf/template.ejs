@@ -32,10 +32,9 @@
       }
 
       header {
-        height: 5cm;
+        height: 4cm;
         padding: 1cm 1cm;
         margin: 0;
-        background-color: var(--header-bg-color);
         margin-bottom: 2rem;
       }
 
@@ -49,6 +48,10 @@
         gap: 1rem;
         align-items: start;
         justify-content: space-between;
+      }
+
+      header .logoAndName .header-content {
+        padding: 1rem 0rem;
       }
 
 
@@ -79,23 +82,28 @@
       main table thead th {
         height: 1cm;
         color: black;
-        background-color: var(--highlight-color);
+        background-color: 	RGB(212, 237, 218);
+        border: #bfc0c3 1px solid;
         padding: .5rem .5rem;
       }
 
 
       main table tbody td {
         padding: 1rem .5rem;
-        border-bottom: 0.5mm solid var(--table-row-separator-color);
+        border: 0.5mm solid var(--table-row-separator-color);
+      }
+
+      main table tbody .category {
+        text-align: center;
       }
 
       main table thead th:last-of-type,
       main table tbody td:last-of-type {
-        text-align: right;
+        text-align: center;
       }
 
       main table th {
-        text-align: left;
+        text-align: center;
       }
     </style>
   </head>
@@ -104,13 +112,13 @@
 <header>
   <div class="headerSection">
     <div class="logoAndName">
-      <div class="">
+      <div class="header-image">
         <img src="http://localhost:3000/<%= user.Profile.profile_picture %>" 
         class="rounded img-responsive" 
         alt="profile"
         width="150px"/>
       </div>
-      <div class="">
+      <div class="header-content">
         <h2><%= user.name %></h2>
         <% if(user.questioner.length > 0) { %>
           <p class="text-muted mb-0" style="font-size: 12px; margin-bottom: 12px; margin-top: 6px;">mengisi data kuisioner pada tanggal <%= new Date(user.questioner[0].createdAt).toLocaleDateString("id-ID", {
@@ -157,7 +165,7 @@
               <td>
                 <%= questioner.questioner %>
               </td>
-              <td>
+              <td class="category">
                 <%= questioner.category.name %>
               </td>
               <td>
@@ -169,8 +177,8 @@
     </tbody>
     <tfood>
       <tr>
-        <td colspan="3">Total</td>
-        <td>
+        <td colspan="3" style="text-align: center; font-size: 1rem; font-weight: bold;">Total</td>
+        <td style="text-align: center; font-size: 1rem; font-weight: bold;">
           <%= total %>
         </td>
       </tr>

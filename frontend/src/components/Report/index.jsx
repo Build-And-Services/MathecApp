@@ -33,7 +33,9 @@ export default function ReportModal({ to, id, show, setShow }) {
     const formData = new FormData();
     for (const key in form) {
       if (form[key] === 'other' && key === 'jenis_laporan') {
-        formData.append('jenis_laporan', form['jenis_pelanggaran']);
+        if (form['jenis_pelanggaran'] !== undefined) {
+          formData.append('jenis_laporan', form['jenis_pelanggaran']);
+        }
       } else {
         formData.append(key, form[key]);
       }

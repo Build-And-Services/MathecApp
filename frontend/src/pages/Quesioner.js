@@ -10,36 +10,9 @@ export default function Quesioner() {
   const [openModalB, setOpenModalB] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
 
-  async function getKuesioner() {
-    const response = await fetch(process.env.REACT_APP_API_HOST + '/api/questioner');
-    const json = await response.json();
-    setData(json.data);
-
-    let dataScore = [];
-
-    json.data.forEach(element => {
-      element.Questioners.forEach(item => {
-        dataScore.push({
-          id_user: user.data.user_id,
-          id_questioner: item.id,
-          score: 0,
-        });
-      });
-    });
-    setDataSubmit(dataScore);
-  }
-
-  async function checkResponden() {
-    const checkResponden = await fetch(process.env.REACT_APP_API_HOST + '/api/questioner/check/' + user.data.user_id);
-    const responseJson = await checkResponden.json();
-    if (responseJson.isResponden) {
-      navigate('/');
-    }
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
-    const checkInput = dataSubmit.filter(item => item.score === 0);
+    const checkInput = dataSubmit.filter((item) => item.score === 0);
     if (checkInput.length !== 0) {
       setOpenModalA(true);
     } else {
@@ -55,12 +28,46 @@ export default function Quesioner() {
   }
 
   useEffect(() => {
+    async function getKuesioner() {
+      const response = await fetch(
+        process.env.REACT_APP_API_HOST + '/api/questioner'
+      );
+      const json = await response.json();
+      setData(json.data);
+
+      let dataScore = [];
+
+      json.data.forEach((element) => {
+        element.Questioners.forEach((item) => {
+          dataScore.push({
+            id_user: user.data.user_id,
+            id_questioner: item.id,
+            score: 0,
+          });
+        });
+      });
+      setDataSubmit(dataScore);
+    }
+
+    async function checkResponden() {
+      const checkResponden = await fetch(
+        process.env.REACT_APP_API_HOST +
+          '/api/questioner/check/' +
+          user.data.user_id
+      );
+      const responseJson = await checkResponden.json();
+      if (responseJson.isResponden) {
+        navigate('/');
+      }
+    }
+
     if (!user) {
       navigate('/auth');
     } else {
       getKuesioner();
       checkResponden();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -85,8 +92,15 @@ export default function Quesioner() {
               {/* header card */}
               <div className='container d-block'>
                 <h3>Petunjuk Pengisian</h3>
-                <h6 className=''>1. Isilah setiap pertanyaan yang diminta dengan cara memilih salah satu jawaban dengan memberi tanda check (.) pada pilihan jawaban yang tersedia berdasarkan pendapat anda sendiri.</h6>
-                <h6>2. Bacalah kembali setiap pertanyaan untuk memastikan tidak ada pertanyaan yang tidak terjawab.</h6>
+                <h6 className=''>
+                  1. Isilah setiap pertanyaan yang diminta dengan cara memilih
+                  salah satu jawaban dengan memberi tanda check (.) pada pilihan
+                  jawaban yang tersedia berdasarkan pendapat anda sendiri.
+                </h6>
+                <h6>
+                  2. Bacalah kembali setiap pertanyaan untuk memastikan tidak
+                  ada pertanyaan yang tidak terjawab.
+                </h6>
                 <p className='m-0'>Keterangan: </p>
                 <ul style={{ listStyleType: 'none' }}>
                   <li>1 = Sangat Tidak Setuju </li>
@@ -99,7 +113,10 @@ export default function Quesioner() {
             </div>
 
             <div className='container p-3'>
-              <form className='row justify-content-center  gap-2' onSubmit={handleSubmit}>
+              <form
+                className='row justify-content-center  gap-2'
+                onSubmit={handleSubmit}
+              >
                 {data.map((item, index) => {
                   return (
                     <div className='col-lg-10 text-center col-sm-12'>
@@ -112,19 +129,44 @@ export default function Quesioner() {
                             return (
                               <div className=''>
                                 <Likert
-                                  question={`${index + 1} ${'.'}       ${kuesioner.questioner}`}
+                                  question={`${index + 1} ${'.'}       ${
+                                    kuesioner.questioner
+                                  }`}
                                   responses={[
-                                    { value: 1, text: 'Sangat Tidak Setuju', id_questioner: kuesioner.id },
-                                    { value: 2, text: 'Tidak Setuju', id_questioner: kuesioner.id },
-                                    { value: 3, text: 'Ragu-ragu', id_questioner: kuesioner.id },
-                                    { value: 4, text: 'Setuju', id_questioner: kuesioner.id },
-                                    { value: 5, text: 'Sangat Setuju', id_questioner: kuesioner.id },
+                                    {
+                                      value: 1,
+                                      text: 'Sangat Tidak Setuju',
+                                      id_questioner: kuesioner.id,
+                                    },
+                                    {
+                                      value: 2,
+                                      text: 'Tidak Setuju',
+                                      id_questioner: kuesioner.id,
+                                    },
+                                    {
+                                      value: 3,
+                                      text: 'Ragu-ragu',
+                                      id_questioner: kuesioner.id,
+                                    },
+                                    {
+                                      value: 4,
+                                      text: 'Setuju',
+                                      id_questioner: kuesioner.id,
+                                    },
+                                    {
+                                      value: 5,
+                                      text: 'Sangat Setuju',
+                                      id_questioner: kuesioner.id,
+                                    },
                                   ]}
                                   style={{ marginBottom: '6rem' }}
-                                  onChange={val => {
-                                    setDataSubmit(prevState => {
-                                      let nextState = prevState.map(item => {
-                                        if (item.id_questioner === val.id_questioner) {
+                                  onChange={(val) => {
+                                    setDataSubmit((prevState) => {
+                                      let nextState = prevState.map((item) => {
+                                        if (
+                                          item.id_questioner ===
+                                          val.id_questioner
+                                        ) {
                                           return {
                                             id_user: user.data.user_id,
                                             id_questioner: item.id_questioner,
@@ -153,14 +195,26 @@ export default function Quesioner() {
           </div>
         </div>
       </div>
-      <div className={`modal fade`} style={{ display: openModalA ? 'block' : 'none' }} id='exampleModalA' tabIndex={-1} aria-labelledby='exampleModalLabel' aria-hidden='true'>
+      <div
+        className={`modal fade`}
+        style={{ display: openModalA ? 'block' : 'none' }}
+        id='exampleModalA'
+        tabIndex={-1}
+        aria-labelledby='exampleModalLabel'
+        aria-hidden='true'
+      >
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>
               <h1 className='modal-title fs-5' id='exampleModalLabel'>
-              Questionnaire
+                Questionnaire
               </h1>
-              <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' />
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              />
             </div>
             <div className='modal-body'>All questions are mandatory!</div>
             <div className='modal-footer'>
@@ -178,16 +232,30 @@ export default function Quesioner() {
           </div>
         </div>
       </div>
-      <div className={`modal fade`} style={{ display: openModalB ? 'block' : 'none' }} id='exampleModalB' tabIndex={-1} aria-labelledby='exampleModalLabel' aria-hidden='true'>
+      <div
+        className={`modal fade`}
+        style={{ display: openModalB ? 'block' : 'none' }}
+        id='exampleModalB'
+        tabIndex={-1}
+        aria-labelledby='exampleModalLabel'
+        aria-hidden='true'
+      >
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>
               <h1 className='modal-title fs-5' id='exampleModalLabel'>
-              Questionnaire
+                Questionnaire
               </h1>
-              <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' />
+              <button
+                type='button'
+                className='btn-close'
+                data-bs-dismiss='modal'
+                aria-label='Close'
+              />
             </div>
-            <div className='modal-body'>Thank you for filling out the questionnaire!</div>
+            <div className='modal-body'>
+              Thank you for filling out the questionnaire!
+            </div>
             <div className='modal-footer'>
               <button
                 type='button'

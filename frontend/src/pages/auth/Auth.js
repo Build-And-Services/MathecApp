@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 // import background from '../../images/background.jpg';
 import logoAuth from '../../images/logo.jpg';
 import './Auth.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Auth() {
   const [registerForm, setRegisterForm] = useState({
@@ -106,9 +106,37 @@ export default function Auth() {
       };
     });
   };
+  const sidebar = useRef(null);
+
+  const openSidebar = () => {
+    sidebar.current.classList.toggle('active')
+  }
 
   return (
     <div className='content-auth'>
+      <div className="header">
+        <div className='burger' onClick={openSidebar}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div className='background-blur' ref={sidebar}>
+        <div className="sidebar">
+          <ul>
+            <li>
+              <Link to={'/'}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to={'/allquestion'}>
+                Question
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div className='container-auth'>
         {/* auth */}
         <div className='container-form'>

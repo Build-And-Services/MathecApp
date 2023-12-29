@@ -7,7 +7,6 @@ import QuestionResult from './QuestionResult';
 import UsersResult from './UserResult';
 import TagResult from './TagResult';
 import { HiChevronDown } from 'react-icons/hi';
-import { useRef } from 'react';
 
 const dropDown = {
   position: 'fixed',
@@ -52,12 +51,6 @@ const Navbar = () => {
   const handleFocus = e => {
     const box = document.querySelector('#box-search');
     box.classList.toggle('focus');
-  };
-
-  const sidebar = useRef(null);
-
-  const openSidebar = () => {
-    sidebar.current.classList.toggle('active');
   };
 
   return (

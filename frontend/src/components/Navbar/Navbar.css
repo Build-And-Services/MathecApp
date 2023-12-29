@@ -78,4 +78,7 @@
   .container-user{
     display: none;
   }
+  .login{
+    display: none;
+  }
 }

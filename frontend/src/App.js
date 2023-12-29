@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Questions from './pages/Questions';
 import AddQuestion from './pages/AddQuestion';
 import AllQuestion from './pages/AllQuestion';
 import Tag from './pages/Tag';
@@ -32,7 +31,6 @@ const App = () => {
           <Route path='/tag/:name' element={<TagByName />}></Route>
           <Route path='/detailquestion/:id' element={<DetailQuestion />}></Route>
           <Route path='/auth' element={<Auth />}></Route>
-          <Route path='/questions' element={<Questions />}></Route>
           <Route path='/addquestion' element={<AddQuestion />}></Route>
           <Route path='/editquestion/:id' element={<EditQuestion />}></Route>
           <Route path='/users' element={<Users />}></Route>

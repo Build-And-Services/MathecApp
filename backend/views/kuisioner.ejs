@@ -7,7 +7,7 @@
       <%- include('./partials/navbar.ejs') %>
         <!-- Header -->
         <!-- Header -->
-        <div class="header bg-primary pb-6">
+        <div class="header bg-success pb-6">
           <div class="container-fluid">
             <div class="header-body">
               <div class="row align-items-center py-4">
@@ -46,11 +46,10 @@
                         <tbody>
                           <% let no=1 %>
                             <% kuisioners.forEach(kuisioner=> { %>
-                              
-                                <tr style="cursor:pointer"  
-                                  data-toggle="modal" 
-                                  data-target="#kuisioner-report-<%= kuisioner.id %>">
-                            
+
+                              <tr style="cursor:pointer" data-toggle="modal"
+                                data-target="#kuisioner-report-<%= kuisioner.id %>">
+
                                 <td>
                                   <%= no++ %>
                                 </td>
@@ -64,9 +63,7 @@
                                   <%= kuisioner.score %>
                                 </td>
                                 <td>
-                                  <a href="/kuisioner/<%= kuisioner.id %>"
-                                      class="btn btn-sm btn-primary"
-                                  >
+                                  <a href="/kuisioner/<%= kuisioner.id %>" class="btn btn-sm btn-primary">
                                     <i class="fas fa-eye"></i>
                                     Lihat
                                   </a>

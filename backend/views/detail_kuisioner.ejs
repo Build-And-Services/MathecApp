@@ -7,7 +7,7 @@
       <%- include('./partials/navbar.ejs') %>
         <!-- Header -->
         <!-- Header -->
-        <div class="header bg-primary pb-6">
+        <div class="header bg-success pb-6">
           <div class="container-fluid">
             <div class="header-body">
               <div class="row align-items-center py-4">
@@ -29,37 +29,38 @@
                     <!-- Card header -->
                     <div class="card-header">
                       <div class="row">
-                       <div class="col-md-3">
-                        <img src="http://localhost:3000/<%= user.Profile.profile_picture%>" 
-                        class="rounded img-responsive" 
-                        alt="profile"
-                        width="200px"/>
-                       </div>
-                       <div class="col-md-6">
-                        <h3 class="mb-2"><%= user.name %></h3>
-                        <% if(user.questioner.length > 0) { %>
-                          <p class="text-muted mb-0" style="font-size: 12px;">mengisi data kuisioner pada tanggal <%= user.questioner[0].createdAt %></p>
-                        <% } else { %> 
-                          <p>Belum pernah mengisi kuisioner</p>
-                        <%}%>
-                        <p class="text-black">
-                          <% if(!user.deskripsi) {%>
-                            Tidak ada deskripsi yang dapat ditampilkan disini.
-                          <% } else { %>
-                            <%= user.deskripsi %>
-                          <% } %>
-                        </p>
-                       </div>
-                       <div class="col-md-3">
-                          <a href="/kuisioner/<%= user.id %>/print"
-                          class="btn btn-success btn-sm">
-                          Download PDF
+                        <div class="col-md-3">
+                          <img src="http://localhost:3000/<%= user.Profile.profile_picture%>"
+                            class="rounded img-responsive" alt="profile" width="200px" />
+                        </div>
+                        <div class="col-md-6">
+                          <h3 class="mb-2">
+                            <%= user.name %>
+                          </h3>
+                          <% if(user.questioner.length> 0) { %>
+                            <p class="text-muted mb-0" style="font-size: 12px;">mengisi data kuisioner pada tanggal <%=
+                                user.questioner[0].createdAt %>
+                            </p>
+                            <% } else { %>
+                              <p>Belum pernah mengisi kuisioner</p>
+                              <%}%>
+                                <p class="text-black">
+                                  <% if(!user.deskripsi) {%>
+                                    Tidak ada deskripsi yang dapat ditampilkan disini.
+                                    <% } else { %>
+                                      <%= user.deskripsi %>
+                                        <% } %>
+                                </p>
+                        </div>
+                        <div class="col-md-3">
+                          <a href="/kuisioner/<%= user.id %>/print" class="btn btn-success btn-sm">
+                            Download PDF
                           </a>
-                       </div>
+                        </div>
                       </div>
 
                       <div class="row table-responsive py-4">
-                       <table class="table table-flush" id="datatable-basics">
+                        <table class="table table-flush" id="datatable-basics">
                           <thead class="thead-light">
                             <tr>
                               <td>No.</td>
@@ -69,25 +70,35 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <% let no = 1; %>
-                            <% let total = 0; %>
-                            <% user.questioner.forEach((questioner) => { %> 
-                              <tr>
-                                <td><%= no++; %></td>
-                                <td><%= questioner.questioner %></td>
-                                <td><%= questioner.category.name %></td>
-                                <td><%= questioner.LinkertScore.score %></td>
-                              </tr>
-                              <% total += questioner.LinkertScore.score %>
-                            <%})%>
+                            <% let no=1; %>
+                              <% let total=0; %>
+                                <% user.questioner.forEach((questioner)=> { %>
+                                  <tr>
+                                    <td>
+                                      <%= no++; %>
+                                    </td>
+                                    <td>
+                                      <%= questioner.questioner %>
+                                    </td>
+                                    <td>
+                                      <%= questioner.category.name %>
+                                    </td>
+                                    <td>
+                                      <%= questioner.LinkertScore.score %>
+                                    </td>
+                                  </tr>
+                                  <% total +=questioner.LinkertScore.score %>
+                                    <%})%>
                           </tbody>
                           <tfood>
                             <tr>
                               <td colspan="3">Total</td>
-                              <td><%= total %></td>
+                              <td>
+                                <%= total %>
+                              </td>
                             </tr>
-                          </tfoot>
-                       </table>
+                            </tfoot>
+                        </table>
                       </div>
 
 

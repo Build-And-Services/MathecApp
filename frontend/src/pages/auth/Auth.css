@@ -26,7 +26,7 @@
   height: 6px;
   border-radius: 10px;
   display: block;
-  background-color: red;
+  background-color: gray;
 }
 .background-blur{
   position: absolute;

@@ -3,63 +3,11 @@ import { useState } from 'react';
 import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai';
 import useAnswerStore from '../zustand/answerStore';
 import { BsExclamationCircleFill } from 'react-icons/bs';
-import { Modal, Form, Spinner } from 'react-bootstrap';
+import ReportModal from './Report/index.jsx';
 
 const DetailAnswer = ({ answer, id, state }) => {
   const { likeAnswer, dislikeAnswer } = useAnswerStore();
   const [show, setShow] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
-  const [form, setForm] = useState({
-    jenis_laporan: '',
-    deskripsi: '',
-    bukti_laporan: '',
-    answer_id: answer.id,
-    pelapor_id: '',
-  });
-  const [file, setFile] = useState();
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    for (const key in form) {
-      formData.append(key, form[key]);
-    }
-
-    if (file) {
-      formData.append('file', file);
-    }
-    setLoading(true);
-    await fetch(process.env.REACT_APP_API_HOST + '/api/reports', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${user.data.token}`,
-      },
-      body: formData,
-    });
-    setTimeout(() => {
-      setLoading(false);
-      handleClose();
-    }, 500);
-  };
-
-  const handleClose = () => setShow(false);
-
-  const handleShow = () => {
-    if (user) {
-      setForm((prevstate) => {
-        return { ...prevstate, pelapor_id: user.data.user_id };
-      });
-      setShow(true);
-    } else {
-      alert('Please Login First for report answer');
-    }
-  };
 
   return (
     <>
@@ -151,7 +99,7 @@ const DetailAnswer = ({ answer, id, state }) => {
                     }}
                     data-toggle='modal'
                     data-target='#exampleModalCenter'
-                    onClick={handleShow}
+                    onClick={() => setShow(true)}
                   >
                     <BsExclamationCircleFill
                       style={{
@@ -174,70 +122,7 @@ const DetailAnswer = ({ answer, id, state }) => {
           </div>
         </div>
       </div>
-      <Modal
-        show={show}
-        size='lg'
-        aria-labelledby='contained-modal-title-vcenter'
-        centered
-      >
-        <Modal.Header closeButton onClick={handleClose}>
-          <Modal.Title id='contained-modal-title-vcenter'>
-            Form Pelaporan
-          </Modal.Title>
-        </Modal.Header>
-        <form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <Form.Group className='mb-3'>
-              <Form.Label>Jenis Pelanggaran</Form.Label>
-              <Form.Select
-                aria-label='Default select example'
-                onChange={(e) =>
-                  setForm((prevstate) => {
-                    return { ...prevstate, jenis_laporan: e.target.value };
-                  })
-                }
-              >
-                <option>Pilih Jenis Pelanggaran</option>
-                <option value='bersifat sara'>Bersifat Sara</option>
-                <option value='bersifat pornografi'>Bersifat Pornografi</option>
-                <option value='bersifat spam'>Bersifat Spam</option>
-                <option value='bersifat politik'>Bersifat Politik</option>
-                <option value='bersifat provokatif'>Bersifat Provokatif</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group
-              className='mb-3'
-              controlId='exampleForm.ControlTextarea1'
-            >
-              <Form.Label>Deskripsi</Form.Label>
-              <Form.Control
-                as='textarea'
-                rows={3}
-                onChange={(e) =>
-                  setForm((prevstate) => {
-                    return { ...prevstate, deskripsi: e.target.value };
-                  })
-                }
-              />
-            </Form.Group>
-            <Form.Group className='mb-3'>
-              <Form.Label>Bukti</Form.Label>
-              <Form.Control type='file' onChange={handleFileChange} />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <button type='submit' className='btn btn-primary'>
-              {loading ? (
-                <Spinner animation='border' role='status'>
-                  <span className='visually-hidden'>Loading...</span>
-                </Spinner>
-              ) : (
-                'Laporkan'
-              )}
-            </button>
-          </Modal.Footer>
-        </form>
-      </Modal>
+      <ReportModal to='user' id={answer.id} show={show} setShow={setShow} />
     </>
   );
 };

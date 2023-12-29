@@ -6,9 +6,23 @@ import MonthPicker from 'simple-react-month-picker';
 // import 'scss/month-picker.scss';
 
 const Home = () => {
-  const { data, isLoading, fetchData, filterData, onLike, onDislike, onSaved, filterMonth, countPage, page, row, setPage, setCountPage } = useHomeStore();
+  const {
+    data,
+    isLoading,
+    fetchData,
+    filterData,
+    onLike,
+    onDislike,
+    onSaved,
+    filterMonth,
+    countPage,
+    page,
+    row,
+    setPage,
+    setCountPage,
+  } = useHomeStore();
 
-  const handleClick = d => {
+  const handleClick = (d) => {
     filterMonth(d[0], d[1]);
   };
 
@@ -19,7 +33,7 @@ const Home = () => {
     }
   };
 
-  const handlePage = page => {
+  const handlePage = (page) => {
     setPage(page);
   };
 
@@ -30,7 +44,7 @@ const Home = () => {
     }
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setCountPage(e.target.value);
     setPage(1);
   };
@@ -59,11 +73,10 @@ const Home = () => {
               backgroundColor: '#fff',
             }}
             onChange={handleChange}
+            value={10}
           >
             <option defaultValue='5'>5</option>
-            <option defaultValue='10' selected>
-              10
-            </option>
+            <option defaultValue='10'>10</option>
             <option defaultValue='20'>20</option>
             <option defaultValue='30'>30</option>
             <option defaultValue='40'>40</option>
@@ -93,7 +106,12 @@ const Home = () => {
           >
             Weeks
           </button>
-          <MonthPicker highlightCol='#24b364' style={{ cursor: 'pointer' }} closeDelay={500} onChange={d => handleClick(d)} />
+          <MonthPicker
+            highlightCol='#24b364'
+            style={{ cursor: 'pointer' }}
+            closeDelay={500}
+            onChange={(d) => handleClick(d)}
+          />
         </div>
       </div>
       {isLoading ? (
@@ -105,19 +123,46 @@ const Home = () => {
       ) : data && data.length === 0 ? (
         <h3 className='text-center mt-3'>Data Not Found!</h3>
       ) : (
-        data.filter((_, index) => index >= page * row - row && index < page * row).map((question, index) => <QuestionsData key={index} question={question} onLike={onLike} onDislike={onDislike} onSave={onSaved} />)
+        data
+          .filter((_, index) => index >= page * row - row && index < page * row)
+          .map((question, index) => (
+            <QuestionsData
+              key={index}
+              question={question}
+              onLike={onLike}
+              onDislike={onDislike}
+              onSave={onSaved}
+            />
+          ))
       )}
 
       <div className='d-flex gap-1'>
-        <div className='bg-white py-3 p-4 rounded' style={{ cursor: 'pointer' }} onClick={handleDown}>
+        <div
+          className='bg-white py-3 p-4 rounded'
+          style={{ cursor: 'pointer' }}
+          onClick={handleDown}
+        >
           {'<'}
         </div>
-        {Array.from({ length: countPage }, (_, index) => index + 1).map((_, index) => (
-          <div key={index} className={`${index + 1 === page ? 'bg-primary text-white' : 'bg-white'} py-3 p-4 rounded`} style={{ cursor: 'pointer' }} onClick={() => handlePage(index + 1)}>
-            {index + 1}
-          </div>
-        ))}
-        <div className='bg-white py-3 p-4 rounded' style={{ cursor: 'pointer' }} onClick={handleUp}>
+        {Array.from({ length: countPage }, (_, index) => index + 1).map(
+          (_, index) => (
+            <div
+              key={index}
+              className={`${
+                index + 1 === page ? 'bg-primary text-white' : 'bg-white'
+              } py-3 p-4 rounded`}
+              style={{ cursor: 'pointer' }}
+              onClick={() => handlePage(index + 1)}
+            >
+              {index + 1}
+            </div>
+          )
+        )}
+        <div
+          className='bg-white py-3 p-4 rounded'
+          style={{ cursor: 'pointer' }}
+          onClick={handleUp}
+        >
           {'>'}
         </div>
       </div>

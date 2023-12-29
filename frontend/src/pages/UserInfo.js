@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import useUserStore from '../zustand/usersStore';
 import { useEffect, useState } from 'react';
@@ -9,67 +8,17 @@ import AnswerRecap from '../components/Recaps/Answer/Answer';
 import CardAnswer from '../components/AnswerCard';
 import { BsPlusLg } from 'react-icons/bs';
 import { BsExclamationCircleFill } from 'react-icons/bs';
-import { Modal, Form, Spinner } from 'react-bootstrap';
+import ReportModal from '../components/Report';
 
 const UserInfo = () => {
   const { isLoading, userinfoById, userinfo } = useUserStore();
-  const user = JSON.parse(localStorage.getItem('user'));
   const { id } = useParams();
   const navigate = useNavigate();
   const [component, setComponent] = useState('UserInfo');
   const [loading, setLoading] = useState(false);
   const [follow, setFollow] = useState(false);
   const [show, setShow] = useState(false);
-  const [file, setFile] = useState();
-  const [form, setForm] = useState({
-    jenis_laporan: '',
-    deskripsi: '',
-    terlapor_id: id,
-    pelapor_id: user.data.user_id,
-  });
-
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setForm(prevstate => ({
-      ...prevstate,
-      [name]: value,
-    }));
-  };
-
-  const handleFileChange = e => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const formData = new FormData();
-    for (const key in form) {
-      formData.append(key, form[key]);
-    }
-
-    if (file) {
-      formData.append('file', file);
-    }
-
-    setLoading(true);
-    await fetch(process.env.REACT_APP_API_HOST + '/api/reports', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${user.data.token}`,
-      },
-      body: formData,
-    });
-    setTimeout(() => {
-      setLoading(false);
-      handleClose();
-      setForm(prevstate => ({
-        ...prevstate,
-        jenis_laporan: '',
-        deskripsi: '',
-      }));
-    }, 500);
-  };
+  const [foll, setFoll] = useState(false);
 
   const today = new Date();
   const longReg = new Date(userinfo.createdAt);
@@ -85,9 +34,6 @@ const UserInfo = () => {
   const timeDiffMonth = (yearCurrent - yearReg) * 12 + monthCurrent - monthReg;
   const timeDIffDay = dayCurrent - dayReg;
   const formattedDate = `${dayReg}-${monthReg}-${yearReg}`;
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const handleUserInfo = () => {
     setLoading(true);
@@ -121,21 +67,6 @@ const UserInfo = () => {
     }, 500);
   };
 
-  const fetchFollow = async () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const result = await fetch(process.env.REACT_APP_API_HOST + '/api/users/check-follow', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        follower_id: id,
-        following_id: user.data.user_id,
-      }),
-    });
-    const response = await result.json();
-
-    setFollow(response.statusFollow);
-  };
-
   const handleFollow = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     await fetch(process.env.REACT_APP_API_HOST + '/api/users/follow', {
@@ -146,10 +77,27 @@ const UserInfo = () => {
         following_id: user.data.user_id,
       }),
     });
-    await fetchFollow();
+    setFoll((prev) => !prev);
   };
 
   useEffect(() => {
+    const fetchFollow = async () => {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const result = await fetch(
+        process.env.REACT_APP_API_HOST + '/api/users/check-follow',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            follower_id: id,
+            following_id: user.data.user_id,
+          }),
+        }
+      );
+      const response = await result.json();
+
+      setFollow(response.statusFollow);
+    };
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       if (id === user.data.user_id) {
@@ -157,7 +105,7 @@ const UserInfo = () => {
       }
       fetchFollow();
     }
-  }, []);
+  }, [id, navigate, foll]);
 
   useEffect(() => {
     userinfoById(id);
@@ -188,7 +136,11 @@ const UserInfo = () => {
             >
               <div>
                 <img
-                  src={userinfo.Profile && userinfo.Profile.profile_picture ? `${process.env.REACT_APP_API_HOST}/${userinfo.Profile.profile_picture}` : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'}
+                  src={
+                    userinfo.Profile && userinfo.Profile.profile_picture
+                      ? `${process.env.REACT_APP_API_HOST}/${userinfo.Profile.profile_picture}`
+                      : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'
+                  }
                   style={{
                     width: '200px',
                     borderRadius: '10%',
@@ -323,7 +275,7 @@ const UserInfo = () => {
                     }}
                     data-toggle='modal'
                     data-target='#exampleModalCenter'
-                    onClick={handleShow}
+                    onClick={() => setShow(true)}
                   >
                     <BsExclamationCircleFill
                       style={{
@@ -401,7 +353,15 @@ const UserInfo = () => {
                     fontSize: '16px',
                   }}
                 >
-                  {userinfo.Profile ? userinfo.Profile.about_me ? userinfo.Profile.about_me : <h4>Biodata not found</h4> : <h4>Biodata not found</h4>}
+                  {userinfo.Profile ? (
+                    userinfo.Profile.about_me ? (
+                      userinfo.Profile.about_me
+                    ) : (
+                      <h4>Biodata not found</h4>
+                    )
+                  ) : (
+                    <h4>Biodata not found</h4>
+                  )}
                 </div>
               </div>
 
@@ -436,7 +396,15 @@ const UserInfo = () => {
                               fontSize: '14px',
                             }}
                           >
-                            {userinfo.Questions && userinfo.Questions.length === 0 ? <p className='mt-3'>No data avaible yet</p> : userinfo.Questions && userinfo.Questions.map((data, index) => <CardQuestion key={index} question={data} />)}
+                            {userinfo.Questions &&
+                            userinfo.Questions.length === 0 ? (
+                              <p className='mt-3'>No data avaible yet</p>
+                            ) : (
+                              userinfo.Questions &&
+                              userinfo.Questions.map((data, index) => (
+                                <CardQuestion key={index} question={data} />
+                              ))
+                            )}
                           </div>
                         </div>
                       </div>
@@ -469,7 +437,7 @@ const UserInfo = () => {
                               </p>
                             ) : (
                               userinfo.answers &&
-                              userinfo.answers.map(answer => (
+                              userinfo.answers.map((answer) => (
                                 <div key={answer.id}>
                                   <CardAnswer answer={answer} />
                                 </div>
@@ -512,7 +480,11 @@ const UserInfo = () => {
                               }}
                             >
                               <img
-                                src={item.Profile && item.Profile.profile_picture ? `${process.env.REACT_APP_API_HOST}/${item.Profile.profile_picture}` : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'}
+                                src={
+                                  item.Profile && item.Profile.profile_picture
+                                    ? `${process.env.REACT_APP_API_HOST}/${item.Profile.profile_picture}`
+                                    : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'
+                                }
                                 style={{
                                   width: '50px',
                                   height: '50px',
@@ -521,7 +493,9 @@ const UserInfo = () => {
                                 alt=''
                               />
                               <div>
-                                <p className='text-center mt-3 fw-bold'>{item.name}</p>
+                                <p className='text-center mt-3 fw-bold'>
+                                  {item.name}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -536,45 +510,7 @@ const UserInfo = () => {
           </div>
         </div>
       </div>
-      <Modal show={show} size='lg' aria-labelledby='contained-modal-title-vcenter' centered>
-        <Modal.Header closeButton onClick={handleClose}>
-          <Modal.Title id='contained-modal-title-vcenter'>Form Pelaporan</Modal.Title>
-        </Modal.Header>
-        <form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <Form.Group className='mb-3'>
-              <Form.Label>Jenis Pelanggaran</Form.Label>
-              <Form.Select aria-label='Default select example' name='jenis_laporan' value={form.jenis_laporan} onChange={handleInputChange}>
-                <option>Pilih Jenis Pelanggaran</option>
-                <option value='bersifat sara'>Bersifat Sara</option>
-                <option value='bersifat pornografi'>Bersifat Pornografi</option>
-                <option value='bersifat spam'>Bersifat Spam</option>
-                <option value='bersifat politik'>Bersifat Politik</option>
-                <option value='bersifat provokatif'>Bersifat Provokatif</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className='mb-3' controlId='exampleForm.ControlTextarea1'>
-              <Form.Label>Deskripsi</Form.Label>
-              <Form.Control as='textarea' rows={3} name='deskripsi' value={form.deskripsi} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group className='mb-3'>
-              <Form.Label>Bukti</Form.Label>
-              <Form.Control type='file' onChange={handleFileChange} />
-            </Form.Group>
-          </Modal.Body>
-          <Modal.Footer>
-            <button type='submit' className='btn btn-primary'>
-              {loading ? (
-                <Spinner animation='border' role='status'>
-                  <span className='visually-hidden'>Loading...</span>
-                </Spinner>
-              ) : (
-                'Laporkan'
-              )}
-            </button>
-          </Modal.Footer>
-        </form>
-      </Modal>
+      <ReportModal to='user' id={id} show={show} setShow={setShow} />
     </>
   );
 };

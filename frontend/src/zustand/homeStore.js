@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 const useHomeStore = create(set => ({
   data: [],
@@ -91,7 +93,15 @@ const useHomeStore = create(set => ({
         });
       }
     } else {
-      alert('Please login first!');
+      Toastify({
+        text: '❗Anda Tidak dapat melakukan like question sebelum login',
+        position: 'center',
+        className: 'info',
+        style: {
+          color: '#000000',
+          background: '#f8d7da',
+        },
+      }).showToast();
     }
   },
 
@@ -127,7 +137,15 @@ const useHomeStore = create(set => ({
         });
       }
     } else {
-      alert('Please login first!');
+      Toastify({
+        text: '❗Anda Tidak dapat melakukan dislike question sebelum login',
+        position: 'center',
+        className: 'info',
+        style: {
+          color: '#000000',
+          background: '#f8d7da',
+        },
+      }).showToast();
     }
   },
   onSaved: async question => {
@@ -162,7 +180,15 @@ const useHomeStore = create(set => ({
         });
       }
     } else {
-      alert('Please login first!');
+      Toastify({
+        text: '❗Anda Tidak dapat melakukan saved question sebelum login',
+        position: 'center',
+        className: 'info',
+        style: {
+          color: '#000000',
+          background: '#f8d7da',
+        },
+      }).showToast();
     }
   },
   filterMonth: async (from, to) => {

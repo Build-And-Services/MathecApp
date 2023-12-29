@@ -7,6 +7,7 @@ import QuestionResult from './QuestionResult';
 import UsersResult from './UserResult';
 import TagResult from './TagResult';
 import { HiChevronDown } from 'react-icons/hi';
+import { useRef } from 'react';
 
 const dropDown = {
   position: 'fixed',
@@ -51,6 +52,12 @@ const Navbar = () => {
   const handleFocus = e => {
     const box = document.querySelector('#box-search');
     box.classList.toggle('focus');
+  };
+
+  const sidebar = useRef(null);
+
+  const openSidebar = () => {
+    sidebar.current.classList.toggle('active');
   };
 
   return (
@@ -249,11 +256,93 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <div style={{}}>
-            <button className='btn btn-primary' onClick={() => navigate('/auth')}>
-              Login
-            </button>
-          </div>
+          <>
+            <div>
+              <button
+                className='navbar-toggler'
+                type='button'
+                data-bs-toggle='collapse'
+                data-bs-target='#navbarSupportedContent'
+                aria-controls='navbarSupportedContent'
+                aria-expanded='false'
+                aria-label='Toggle navigation'
+                onClick={() => setToggle(prevState => !prevState)}
+              >
+                <span className='navbar-toggler-icon'></span>
+              </button>
+              <div className='bg-white border z-3 hidden-lg' style={!toggle ? dropDownHide : dropDown}>
+                <ul
+                  className=''
+                  style={{
+                    listStyle: 'none',
+                    padding: '10px 60px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                  }}
+                >
+                  <li>
+                    <Link
+                      to={'/'}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'black',
+                      }}
+                      onClick={() => setToggle(prevState => !prevState)}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <Link
+                    to={'/allquestion'}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'black',
+                    }}
+                    onClick={() => setToggle(prevState => !prevState)}
+                  >
+                    Questions
+                  </Link>
+                  <li></li>
+                  <li>
+                    <Link
+                      to={'/tag'}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'black',
+                      }}
+                      onClick={() => setToggle(prevState => !prevState)}
+                    >
+                      Tag
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={'/auth'}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'black',
+                      }}
+                      onClick={() => setToggle(prevState => !prevState)}
+                    >
+                      <button className='btn btn-primary'>Login</button>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <Link
+              to={'/auth'}
+              style={{
+                textDecoration: 'none',
+                color: 'black',
+              }}
+              className='login'
+              onClick={() => setToggle(prevState => !prevState)}
+            >
+              <button className='btn btn-primary'>Login</button>
+            </Link>
+          </>
         )}
       </div>
     </nav>
